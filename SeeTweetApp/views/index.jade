@@ -1,5 +1,6 @@
 extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
+block search
+  div.input-group
+    span#basic-addon1.input-group-addon @
+    input(type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1")
