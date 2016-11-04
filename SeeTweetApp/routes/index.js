@@ -16,7 +16,7 @@ router.get('/', function(req, res){
   });
 });
 
-router.get('/', function(req, res, next) {
+router.get('/tweet', function(req, res, next) {
   client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 20 }, function(error, tweets, response) {
     if (!error) {
       res.status(200).render('index', { title: 'Express', tweets: tweets });
@@ -29,4 +29,4 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-  // https://dev.twitter.com/rest/reference/get/statuses/user_timeline
+// https://dev.twitter.com/rest/reference/get/statuses/user_timeline
