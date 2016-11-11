@@ -6,4 +6,7 @@ block search
     input(type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1")
 
 block timeline 
-  p #{tweets}
+  p #{info.tweets}
+  p $(info)
+
+//script (var data = !{JSON.stringify(info.tweets).replace(/<\//g, "<\\/")})     

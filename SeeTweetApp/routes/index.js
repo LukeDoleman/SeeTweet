@@ -27,13 +27,13 @@ var request = require('request');
     console.log(response);
 }); */
 
-router.get('/post', function(req,res,next) {
+/*router.get('/post', function(req,res,next) {
   client.post('statuses/update', {status: '...'}, function(error, tweet, response) {
     if (!error) {
       console.log(tweet);
     }
   });
-});
+}); */
 
 router.get('/', function(req, res){
   res.render('index', {
@@ -41,11 +41,24 @@ router.get('/', function(req, res){
   });
 });
 
+var endOfLine = require('os').EOL;
+
 router.get('/timeline', function(req, res, next) {
-  client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 2 }, function(error, tweets, response) {
+  client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 10}, function(error, tweets, response) {
     if (!error) {
-      res.status(200).render('index', { title: 'Express', tweets: tweets });
-      console.log(tweets);
+      //tweets = JSON.stringify(tweets[0].text);
+
+      //console.log(JSON.stringify(tweets));
+      //loop over tweets and print to console x
+      //var jsonContent = JSON.parse(tweets);
+      var lines='';
+      for(var i = 0; i < tweets.length;i++){
+        lines = lines + tweets[i].text + endOfLine;
+      }
+      //console.log(lines);
+      //lines = JSON.parse(lines);*/
+      //lines = JSON.stringify(lines);
+      res.status(200).render('index', {info: {title:'Timeline', tweets: lines }});
     }
     else {
       res.status(500).json({ error: error });
@@ -54,5 +67,3 @@ router.get('/timeline', function(req, res, next) {
 });
 
 module.exports = router;
-
-// https://dev.twitter.com/rest/reference/get/statuses/user_timeline
