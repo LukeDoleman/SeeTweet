@@ -44,17 +44,17 @@ router.get('/', function(req, res){
 var endOfLine = require('os').EOL;
 
 router.get('/timeline', function(req, res, next) {
-  client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 10}, function(error, tweets, response) {
+  client.get('statuses/user_timeline', { screen_name: 'bbcnews', count: 10}, function(error, tweets, response) {
     if (!error) {
       //tweets = JSON.stringify(tweets[0].text);
 
       //console.log(JSON.stringify(tweets));
-      //loop over tweets and print to console x
       //var jsonContent = JSON.parse(tweets);
-      var lines='';
+      var lines=[];
       for(var i = 0; i < tweets.length;i++){
-        lines = lines + tweets[i].text + endOfLine;
+        lines.push(tweets[i].text);
       }
+      console.log(lines);
       //console.log(lines);
       //lines = JSON.parse(lines);*/
       //lines = JSON.stringify(lines);
