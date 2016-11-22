@@ -36,7 +36,7 @@ var request = require('request');
 }); */
 
 router.get('/', function(req, res){
-  res.render('index', {
+  res.render('layout', {
     title: 'Home'
   });
 });
@@ -46,19 +46,13 @@ var endOfLine = require('os').EOL;
 router.get('/timeline', function(req, res, next) {
   client.get('statuses/user_timeline', { screen_name: 'bbcnews', count: 10}, function(error, tweets, response) {
     if (!error) {
-      //tweets = JSON.stringify(tweets[0].text);
-
-      //console.log(JSON.stringify(tweets));
-      //var jsonContent = JSON.parse(tweets);
       var lines=[];
       for(var i = 0; i < tweets.length;i++){
         lines.push(tweets[i].text);
       }
       console.log(lines);
-      //console.log(lines);
-      //lines = JSON.parse(lines);*/
-      //lines = JSON.stringify(lines);
-      res.status(200).render('index', {info: {title:'Timeline', tweets: lines }});
+      handle='';
+      res.status(200).render('index', {info: {title:'Timeline', tweets: lines, handle:handle }});
     }
     else {
       res.status(500).json({ error: error });

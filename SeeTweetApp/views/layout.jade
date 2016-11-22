@@ -6,39 +6,46 @@ html
     link(rel='stylesheet', href='/stylesheets/chunkfive-fontface.css')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     
-    
-    
   body  
     header 
-      p See Tweet - Welcome to 
+      p See Tweet
 
-    block search     
+  block search   
+    div.col-lg-offset-3.col-lg-6
+      div.input-group
+        input(type="text" class="form-control" placeholder="@Username")
+        span.input-group-btn
+          button(class="btn btn-secondary" type="button")      
+            span See!  
+      
+  block timeline
+    //- div.col-lg-12
+    //-   ul
+    //-   each val in info.tweets
+    //-     li= val
     
-    block timeline
-
-
     //header
-      nav
-        ul
-          li 
-            a(href="/") Home
-          li 
-            a(href="/about") About
-          li 
-            a(href="/contact") Contact
-            
-    //section#wrapper
-        block content
-        footer 
-          section.css-table
-            section.four-column
-              section.cell
-                p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-              section.cell
-                p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-              section.cell
-                p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-              section.cell
-                p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
+    //- nav
+    //-   ul
+    //-     li 
+    //-       a(href="/") Home
+    //-     li 
+    //-       a(href="/about") About
+    //-     li 
+    //-       a(href="/contact") Contact
+    //-         
+    //- //section#wrapper
+    //- block content
+    //-   footer 
+    //-     section.css-table
+    //-       section.four-column
+    //-         section.cell
+    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
+    //-         section.cell
+    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
+    //-         section.cell
+    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
+    //-         section.cell
+    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
                        
-  script (src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")     
+script (src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")     
