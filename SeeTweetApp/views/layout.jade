@@ -21,8 +21,35 @@ html
   block timeline
     //- div.col-lg-12
     //-   ul
-    //-   each val in info.tweets
-    //-     li= val
+    //-   each tweet in tweets
+    //-     li= tweet 
+        
+    //- div.col-lg-12
+    //-   ul
+    //-   each fav in favs
+    //-     li= fav 
+    //- 
+    //- div.col-lg-12
+    //-   ul
+    //-   each rt in retweets
+    //-     li= rt 
+        
+    div.col-lg-12    
+      div.panel.panel-default
+        div.panel-heading
+          h3.panel-title 
+            img(src=pic)
+            span  #{user[0]}
+        - for (var i = 0; i < 10; ++i) {
+        div.panel-body
+          span=tweets[i]
+          span=" Favourite Count: " + favs[i]
+                //li= tweets[i] + "  " + favs[i]
+        - }
+            
+      
+      
+    
     
     //header
     //- nav

@@ -41,18 +41,21 @@ router.get('/', function(req, res){
   });
 });
 
-var endOfLine = require('os').EOL;
-
 router.get('/timeline', function(req, res, next) {
   client.get('statuses/user_timeline', { screen_name: 'bbcnews', count: 10}, function(error, tweets, response) {
     if (!error) {
-      var lines=[];
+      var favs=[]; var text=[];var retweets=[];var user=[];
+      console.log(tweets);
+      var thumbnail = tweets[0].user.profile_image_url;
       for(var i = 0; i < tweets.length;i++){
-        lines.push(tweets[i].text);
+        //tweets.push(tweets[i].text);
+        text[i] = tweets[i].text;
+        favs[i] = tweets[i].favorite_count;
+        retweets[i] = tweets[i].retweet_count;
+        user[i] = tweets[i].user.name;
       }
-      console.log(lines);
-      handle='';
-      res.status(200).render('index', {info: {title:'Timeline', tweets: lines, handle:handle }});
+      res.status(200).render('layout', {title:'Timeline',
+      tweets: text, favs: favs, retweets:retweets, test:tweets, user:user, pic:thumbnail});
     }
     else {
       res.status(500).json({ error: error });
