@@ -42,17 +42,17 @@ router.get('/', function(req, res){
 });
 
 router.get('/timeline', function(req, res, next) {
-  client.get('statuses/user_timeline', { screen_name: 'bbcnews', count: 10}, function(error, tweets, response) {
+  client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 10}, function(error, tweets, response) {
     if (!error) {
-      var favs=[]; var text=[];var retweets=[];var user=[];
-      console.log(tweets);
+      var favs=[]; var text=[];var retweets=[];
+      //console.log(tweets);
       var thumbnail = tweets[0].user.profile_image_url;
+      var user = tweets[0].user.name;
       for(var i = 0; i < tweets.length;i++){
         //tweets.push(tweets[i].text);
         text[i] = tweets[i].text;
         favs[i] = tweets[i].favorite_count;
         retweets[i] = tweets[i].retweet_count;
-        user[i] = tweets[i].user.name;
       }
       res.status(200).render('layout', {title:'Timeline',
       tweets: text, favs: favs, retweets:retweets, test:tweets, user:user, pic:thumbnail});

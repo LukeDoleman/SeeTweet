@@ -39,12 +39,11 @@ html
         div.panel-heading
           h3.panel-title 
             img(src=pic)
-            span  #{user[0]}
+            span  #{user}
         - for (var i = 0; i < 10; ++i) {
         div.panel-body
-          span=tweets[i]
-          span=" Favourite Count: " + favs[i]
-                //li= tweets[i] + "  " + favs[i]
+          span #{tweets[i]}
+          span <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
         - }
             
       
