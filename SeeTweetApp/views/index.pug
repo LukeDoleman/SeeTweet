@@ -1,0 +1,21 @@
+extends layout
+
+block main
+  div.col-lg-offset-3.col-lg-6
+    div.input-group
+      input(type="text" class="form-control" placeholder="@Username" id="userInput")
+      span.input-group-btn
+        button(class="btn btn-secondary" type="button" onClick="getTweets()")
+          span See!
+
+  script(src="/socket.io/socket.io.js")
+  script(
+        var socket = io.connect('http://localhost');
+        var data = "sss"
+        socket.on('news', function (data) {
+          console.log(data);
+          socket.emit('my other event', { my: 'data' });
+        });)
+
+
+//- script (var data = !{JSON.stringify(info.tweets).replace(/<\//g, "<\\/")})
