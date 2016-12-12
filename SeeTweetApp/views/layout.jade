@@ -13,65 +13,32 @@ html
   block search   
     div.col-lg-offset-3.col-lg-6
       div.input-group
-        input(type="text" class="form-control" placeholder="@Username")
+        input(type="text" class="form-control" placeholder="@Username" id="userInput")
         span.input-group-btn
-          button(class="btn btn-secondary" type="button")      
+          button(class="btn btn-secondary" type="button" onClick="getTweets()") 
             span See!  
-      
-  block timeline
-    //- div.col-lg-12
-    //-   ul
-    //-   each tweet in tweets
-    //-     li= tweet 
-        
-    //- div.col-lg-12
-    //-   ul
-    //-   each fav in favs
-    //-     li= fav 
-    //- 
-    //- div.col-lg-12
-    //-   ul
-    //-   each rt in retweets
-    //-     li= rt 
-        
+  
+  block timeline     
     div.col-lg-12    
       div.panel.panel-default
         div.panel-heading
           h3.panel-title 
             img(src=pic)
-            span  #{user}
-        - for (var i = 0; i < 10; ++i) {
+            span  #{user} | Followers: #{followers}<br><br> #{description}
+        - for (var i = 0; i < 320; ++i) {
         div.panel-body
-          span #{tweets[i]}
-          span <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
+          span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
         - }
-            
-      
-      
-    
-    
-    //header
-    //- nav
-    //-   ul
-    //-     li 
-    //-       a(href="/") Home
-    //-     li 
-    //-       a(href="/about") About
-    //-     li 
-    //-       a(href="/contact") Contact
-    //-         
-    //- //section#wrapper
-    //- block content
-    //-   footer 
-    //-     section.css-table
-    //-       section.four-column
-    //-         section.cell
-    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-    //-         section.cell
-    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-    //-         section.cell
-    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-    //-         section.cell
-    //-           p Mauris porttitor <br />felis eu leo aliquet<br /> ac rutrum odio aliquet
-                       
+  
+  //header
+  //- nav
+  //-   ul
+  //-     li 
+  //-       a(href="/") Home
+  //-     li 
+  //-       a(href="/about") About
+  //-     li 
+  //-       a(href="/contact") Contact
+
 script (src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")     
+script (src="/javascripts/file.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")     
