@@ -39,6 +39,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
+  app.locals.pretty = true;
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -58,21 +59,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-//Socket.io setup to enable data passing from Client
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
-server.listen(8888);
-
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.pug');
-});
-
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
 
 module.exports = app;

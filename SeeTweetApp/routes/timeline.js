@@ -10,7 +10,8 @@ var client = new Twitter({
 
 
 router.get('/', function(req, res, next) {
-  client.get('statuses/user_timeline', { screen_name: 'nodejs', count: 320}, function(error, tweets, response) {
+  var twitter_handle = req.param('username');
+  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 10}, function(error, tweets, response) {
     if (!error) {
       var favs=[]; var text=[];var retweets=[];
       console.log(tweets);
