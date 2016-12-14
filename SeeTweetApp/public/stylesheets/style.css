@@ -3,6 +3,35 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+/* Vertical alignment test
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.flexbox {
+ display:flex;
+ justify-content:center;
+ align-items: center;
+ flex-flow: column;
+}*/
+
+/* Styling for the header and search regions */
 header p {
   font-size:24px;
+  text-align: center;
+}
+
+.input-group-btn > .btn {
+  border-radius: 0px;
+  border-color: #ccc;
+  color:#999
+}
+
+.input-group .form-control {
+  border-radius: 0px;
+  box-shadow: none;
+  background-color: transparent;
 }

@@ -1,13 +1,13 @@
 extends layout
 
 block main
-  div.col-lg-12
+  div.col-lg-12(class="vcenter")
     div.panel.panel-default
       div.panel-heading
         h3.panel-title
           img(src=pic)
           span  #{user} | Followers: #{followers}<br><br> #{description}
-      -for(var i = 0; i < 10; ++i){
+      -for(var i = 0; i < 320; ++i){
         div.panel-body
           span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
       -}
