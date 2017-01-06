@@ -33,6 +33,10 @@ router.get('/', function(req, res, next) {
             if (arrayMatch in mentions) {
               mentions[arrayMatch] = mentions[arrayMatch] += 1;
             } else {
+
+              //HERE can add a node to the list of dictionaries
+              //Might aswell also add picture and any other stuff for the graph here in future
+
               mentions[arrayMatch] = 1;
             }
           }
@@ -77,7 +81,7 @@ router.get('/', function(req, res, next) {
       // }
 
       //console.log(mentions);
-      jsonfile.writeFile('mentions.json', mentions, function (err) {
+      jsonfile.writeFile('public/info/mentions.json', mentions, function (err) {
         console.error(err);
       });
       res.status(200).render('timeline', {title:'Timeline',

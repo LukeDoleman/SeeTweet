@@ -26,14 +26,24 @@
 //Need to convert {x:1,y:2} to [{x:1},{y:2}]
 
 
-d3.json("/javascripts/mentions.json", function(data) {
-  console.log(data);
-});
+d3.json('info/mentions.json', function(data) {
 
-//   d3.select("svg").selectAll("p")
-//       .data(data)
-//       .enter()
-//       .append("p")
-//       .text("New paragraph!");
-//
-// });
+  console.log(data);
+
+  // d3.select("svg").selectAll("p")
+  //     .data(data)
+  //     .enter()
+  //     .append("p")
+  //     .text("New paragraph!");
+
+  var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
+
+  var circleSelection = svg.append("circle")
+       .attr("cx", 25)
+       .attr("cy", 25)
+       .attr("r", 25)
+       .style("fill", "purple");
+
+});
