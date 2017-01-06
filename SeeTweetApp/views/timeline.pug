@@ -1,13 +1,26 @@
 extends layout
 
 block main
-  div.col-lg-12(class="vcenter")
-    div.panel.panel-default
-      div.panel-heading
-        h3.panel-title
-          img(src=pic)
-          span  #{user} | Followers: #{followers}<br><br> #{description}
-      -for(var i = 0; i < 320; ++i){
-        div.panel-body
-          span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
-      -}
+  //- div.col-lg-12(class="vcenter")
+  //-   div.panel.panel-default
+  //-     div.panel-heading
+  //-       h3.panel-title
+  //-         img(src=pic)
+  //-         span  #{user} | Followers: #{followers}<br><br> #{description} <br> #{mentions}
+  //-     -for(var i = 0; i < 320; ++i){
+  //-       div.panel-body
+  //-         span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
+  //-     -}
+
+  svg(width="960" height="600")
+
+  //- var svg = d3.select("svg"),
+  //-   width = +svg.attr("width"),
+  //-   height = +svg.attr("height");
+  //-
+  //- var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+  //- var simulation = d3.forceSimulation()
+  //-     .force("link", d3.forceLink().id(function(d) { return d.id; }))
+  //-     .force("charge", d3.forceManyBody())
+  //-     .force("center", d3.forceCenter(width / 2, height / 2));
