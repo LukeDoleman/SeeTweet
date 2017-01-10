@@ -26,6 +26,20 @@ d3.json('info/mentions.json', function(error, people) {
       .attr("r", 5)
       .attr("fill", "purple");
 
+  // var text = svg.selectAll("circle")
+  //     .data(jpeople.handles)
+  //     .enter().append("text")
+  //     .attr("dy", ".35em");
+  //     text.text(function(d) { return d.user; });
+    	// .style("font-size", nominal_text_size + "px")
+
+    	// if (text_center)
+    	//  text.text(function(d) { return d.id; })
+    	// .style("text-anchor", "middle");
+    	// else
+    	// text.attr("dx", function(d) {return (size(d.size)||nominal_base_node_size);})
+      //   .text(function(d) { return '\u2002'+d.id; });
+
   node.append("title")
       .text(function(d) { return d.user; });
 

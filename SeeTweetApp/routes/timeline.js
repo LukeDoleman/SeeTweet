@@ -32,8 +32,13 @@ router.get('/', function(req, res, next) {
           for (var j = 0; j < stringMatch.length;j++) {
             var arrayMatch = stringMatch[j];
             if (mentions.handles.length === 0) {
-              mentions.handles.push({"user":arrayMatch,"count":1});
-              matched.push(arrayMatch);
+              if (arrayMatch != ("@" + twitter_handle)){
+                mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                matched.push(arrayMatch);
+              } else {
+                mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                matched.push(arrayMatch);
+              }
             } else {
                 if(matched.indexOf(arrayMatch) >= 0) {
                   for (var k=0;k<mentions.handles.length;k++) {
@@ -42,13 +47,26 @@ router.get('/', function(req, res, next) {
                     }
                   }
                 } else {
-                  mentions.handles.push({"user":arrayMatch,"count":1});
-                  matched.push(arrayMatch);
+                  if (arrayMatch != ("@" + twitter_handle)){
+                    mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                    matched.push(arrayMatch);
+                  } else {
+                    mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                    matched.push(arrayMatch);
+                  }
                 }
             }
           }
         }
       }
+
+      //Sort mentions in descending order
+      mentions.handles.sort(function(a, b) {
+          return parseFloat(b.count) - parseFloat(a.count);
+      });
+      mentions.handles = mentions.handles.slice(0,11);
+      console.log(mentions);
+
       jmentions = JSON.stringify(mentions);
       console.log(jmentions);
       jsonfile.writeFile('public/info/mentions.json', jmentions, function (err) {
