@@ -31,40 +31,29 @@ router.get('/', function(req, res, next) {
         if (!!stringMatch) {
           for (var j = 0; j < stringMatch.length;j++) {
             var arrayMatch = stringMatch[j];
-            console.log(arrayMatch);
-            // if (arrayMatch in mentions) {
-            //   mentions[arrayMatch] = mentions[arrayMatch] += 1;
-            // } else {
-            //   //[{"@luke":1},{"@evan":2},{"@john":2}]
-            //   //HERE can add a node to the list of dictionaries
-            //   //Might aswell also add picture and any other stuff for the graph here in future
-            //   mentions[arrayMatch] = 1;
-            // }
-            //console.log(Object.values(mentions.handles[0]));
             if (mentions.handles.length === 0) {
-              mentions.handles.push({"user":arrayMatch, "count":1});
+              mentions.handles.push({"user":arrayMatch,"count":1});
               matched.push(arrayMatch);
             } else {
                 if(matched.indexOf(arrayMatch) >= 0) {
                   for (var k=0;k<mentions.handles.length;k++) {
                     if (mentions.handles[k].user === arrayMatch){
                       mentions.handles[k].count = mentions.handles[k].count + 1;
-                    }  
+                    }
                   }
                 } else {
-                  mentions.handles.push({"user":arrayMatch, "count":1});
+                  mentions.handles.push({"user":arrayMatch,"count":1});
                   matched.push(arrayMatch);
                 }
             }
           }
         }
       }
-      //console.log(mentions.handles[0].count);
       jmentions = JSON.stringify(mentions);
       console.log(jmentions);
-      // jsonfile.writeFile('public/info/mentions.json', mentions, function (err) {
-      //   console.error(err);
-      // });
+      jsonfile.writeFile('public/info/mentions.json', jmentions, function (err) {
+        console.error(err);
+      });
       res.status(200).render('timeline', {title:'Timeline',
         tweets: text, favs: favs, retweets:retweets, test:tweets,
         user:user, pic:thumbnail, followers:followers,
@@ -112,29 +101,4 @@ module.exports = router;
 //       res.status(500).json({error:error});
 //     }
 //   });
-// }
-
-// for(var i=0;i<tweets.length;i++) {
-//   text[i] = tweets[i].text;
-//   favs[i] = tweets[i].favorite_count;
-//   retweets[i] = tweets[i].retweet_count;
-//   var stringMatch = (tweets[i].text).match(pattern);
-//   if (!!stringMatch) {
-//     for (var j=0;j<stringMatch.length;j++) {
-//       var arrayMatch = stringMatch[j];
-//       if (mentions.length !== 0){
-//         for (var mention in mentions) {
-//           if (arrayMatch === Object.keys(mentions[mention])[0]) {
-//             mentions[mention][Object.keys(mentions[mention])[0]] =
-//             mentions[mention][Object.keys(mentions[mention])[0]] + 1;
-//           } else {
-//             //[{"@luke":1},{"@evan":2},{"@john":2}]
-//             mentions.push({[arrayMatch]:1});
-//           }
-//         }
-//       } else {
-//         mentions.push({[arrayMatch]:1});
-//       }
-//     }
-//   } console.log(mentions);
 // }
