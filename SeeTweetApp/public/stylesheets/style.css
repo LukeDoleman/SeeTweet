@@ -35,3 +35,8 @@ header p {
   box-shadow: none;
   background-color: transparent;
 }
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}

@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
       var followers = tweets[0].user.followers_count;
-      var mentions={}; mentions.handles = [];
+      var mentions={}; mentions.handles = []; mentions.links = [];
       var matched=[];
       var pattern = /\B@[a-z0-9_-]+/gi;
       for(var i = 0; i < tweets.length;i++) {
@@ -67,9 +67,19 @@ router.get('/', function(req, res, next) {
       mentions.handles = mentions.handles.slice(0,11);
       console.log(mentions);
 
-      jmentions = JSON.stringify(mentions);
-      console.log(jmentions);
-      jsonfile.writeFile('public/info/mentions.json', jmentions, function (err) {
+      for (var l=0;l<mentions.handles.length;l++) {
+          console.log(mentions.handles[l].user);
+          if (!mentions.handles[l].self) {
+            mentions.links.push({"source":mentions.handles[0].user,
+            "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
+          }
+      }
+
+      console.log(mentions);
+
+      //jmentions = JSON.stringify(mentions);
+      //console.log(jmentions);
+      jsonfile.writeFile('public/info/mentions.json', mentions, function (err) {
         console.error(err);
       });
       res.status(200).render('timeline', {title:'Timeline',
