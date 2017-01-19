@@ -4,13 +4,10 @@ var svg = d3.select("svg"),
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) {return d.user;}))
+    //.distance(function(d) {console.log(d.count);})
+    //.force("link", d3.layout.force().linkDistance(100))
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
-
-// var simulation = d3.forceSimulation()
-//     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-//     .force("charge", d3.forceManyBody())
-//     .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json('info/mentions.json', function(error, jpeople) {
   console.log(error);
@@ -55,22 +52,22 @@ d3.json('info/mentions.json', function(error, jpeople) {
       }
 
   });
-
-  // node.append("span")
-  //     .attr("dx", 12)
-  //     .attr("dy", ".35em")
-  //     .text(function(d) { return d.user; });
-
-  // var text = svg.selectAll("circle")
-  //     .data(jpeople.handles)
-  //     .enter().append("text")
-  //     .attr("dy", ".35em");
-  //     text.text(function(d) { return d.user; });
-    	// .style("font-size", nominal_text_size + "px")
-
-    	// if (text_center)
-    	//  text.text(function(d) { return d.id; })
-    	// .style("text-anchor", "middle");
-    	// else
-    	// text.attr("dx", function(d) {return (size(d.size)||nominal_base_node_size);})
-      //   .text(function(d) { return '\u2002'+d.id; });
+//
+//   // node.append("span")
+//   //     .attr("dx", 12)
+//   //     .attr("dy", ".35em")
+//   //     .text(function(d) { return d.user; });
+//
+//   // var text = svg.selectAll("circle")
+//   //     .data(jpeople.handles)
+//   //     .enter().append("text")
+//   //     .attr("dy", ".35em");
+//   //     text.text(function(d) { return d.user; });
+//     	// .style("font-size", nominal_text_size + "px")
+//
+//     	// if (text_center)
+//     	//  text.text(function(d) { return d.id; })
+//     	// .style("text-anchor", "middle");
+//     	// else
+//     	// text.attr("dx", function(d) {return (size(d.size)||nominal_base_node_size);})
+//       //   .text(function(d) { return '\u2002'+d.id; });

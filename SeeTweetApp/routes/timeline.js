@@ -8,89 +8,375 @@ var client = new Twitter({
   bearer_token: 'AAAAAAAAAAAAAAAAAAAAAFT%2FxgAAAAAAG5djI51WpTcUGgbTNw%2BP3n30Xss%3DrLomzfrUXc1Ul2uWQ52S5gBYm3W0ru5afyCR0ziQ7DfzrPffRt'
 });
 var jsonfile = require('jsonfile');
+var async = require('async');
 
 // var file = 'mentions.json';
 
-router.get('/', function(req, res, next) {
+//router.get() {
+//  twitter.get() {
+//    do nonsense
+//  }
+//  twitter.get() {
+//    do nonsense
+//  }
+//  twitter.get() {
+//    do nonsense
+//  }
+//  res.render(results)
+
+//Find initial 10 mentions
+//For each mention
+  //Crawl their 5 most frequently contacted and add to master mentions list
+//Get photos and link for all and pass through to D3
+
+// http://www.sebastianseilund.com/nodejs-async-in-practice
+
+
+//Get JSON of most frequently contacted users for graph
+//including profile image & link
+router.get('/',function(req,res) {
   var twitter_handle = req.param('username');
-  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
-    if (!error) {
-      var favs=[];var text=[];var retweets=[];
-      var thumbnail = tweets[0].user.profile_image_url;
-      var user = tweets[0].user.name;
-      var description = tweets[0].user.description;
-      var followers = tweets[0].user.followers_count;
-      var mentions={}; mentions.handles = []; mentions.links = [];
-      var matched=[];
-      var pattern = /\B@[a-z0-9_-]+/gi;
-      for(var i = 0; i < tweets.length;i++) {
-        text[i] = tweets[i].text;
-        favs[i] = tweets[i].favorite_count;
-        retweets[i] = tweets[i].retweet_count;
-        var stringMatch = (tweets[i].text).match(pattern);
-        if (!!stringMatch) {
-          for (var j = 0; j < stringMatch.length;j++) {
-            var arrayMatch = stringMatch[j];
-            if (mentions.handles.length === 0) {
-              if (arrayMatch != ("@" + twitter_handle)){
-                mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
-                matched.push(arrayMatch);
+  console.log(twitter_handle);
+
+  //Async used to ensure initial get request finishes before data is used
+  async.waterfall([
+
+      //Get initial timeline of given user twitter handle
+      function(callback) {
+        client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320},function(error, tweets, response) {
+              if (!error) {
+                console.log("Tweets Crawled Successfully!");
               } else {
-                mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
-                matched.push(arrayMatch);
+                console.log(error);
               }
-            } else {
-                if(matched.indexOf(arrayMatch) >= 0) {
-                  for (var k=0;k<mentions.handles.length;k++) {
-                    if (mentions.handles[k].user === arrayMatch){
-                      mentions.handles[k].count = mentions.handles[k].count + 1;
+              callback(null, tweets);
+            });
+      },
+
+      //Extract top 10 most frequently mentioned contacts of user
+      function(tweets, callback) {
+        var mentions={};mentions.handles=[];mentions.links=[];
+        var matched=[];
+        var pattern = /\B@[a-z0-9_-]+/gi;
+        for(var i = 0; i < tweets.length;i++) {
+          var stringMatch = (tweets[i].text).match(pattern);
+          if (!!stringMatch) {
+            for (var j = 0; j < stringMatch.length;j++) {
+              var arrayMatch = stringMatch[j];
+              if (mentions.handles.length === 0) {
+                if (arrayMatch != ("@" + twitter_handle)){
+                  mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                  matched.push(arrayMatch);
+                } else {
+                  mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                  matched.push(arrayMatch);
+                }
+              } else {
+                  if(matched.indexOf(arrayMatch) >= 0) {
+                    for (var k=0;k<mentions.handles.length;k++) {
+                      if (mentions.handles[k].user === arrayMatch){
+                        mentions.handles[k].count = mentions.handles[k].count + 1;
+                      }
+                    }
+                  } else {
+                    if (arrayMatch != ("@" + twitter_handle)){
+                      mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                      matched.push(arrayMatch);
+                    } else {
+                      mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                      matched.push(arrayMatch);
                     }
                   }
-                } else {
-                  if (arrayMatch != ("@" + twitter_handle)){
-                    mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
-                    matched.push(arrayMatch);
-                  } else {
-                    mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
-                    matched.push(arrayMatch);
-                  }
-                }
+              }
             }
           }
         }
+
+        //Sort mentions in descending order
+        mentions.handles.sort(function(a, b) {
+            return parseFloat(b.count) - parseFloat(a.count);
+        });
+        mentions.handles = mentions.handles.slice(0,11);
+
+        for (var l=0;l<mentions.handles.length;l++) {
+            console.log(mentions.handles[l].user);
+            if (!mentions.handles[l].self) {
+              mentions.links.push({"source":mentions.handles[0].user,
+              "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
+            }
+        }
+        callback(null, mentions);
+      },
+
+    ], function (err, result) {
+        console.log(result);
+    });
+
+    var full_mentions = result;
+    var contacts = [];
+    for (var i=0;i<full_mentions.handles.length;i++) {
+      if (!full_mentions.handles[i].self) {
+        contacts.push(full_mentions.handles[i].user);
       }
-
-      //Sort mentions in descending order
-      mentions.handles.sort(function(a, b) {
-          return parseFloat(b.count) - parseFloat(a.count);
-      });
-      mentions.handles = mentions.handles.slice(0,11);
-      console.log(mentions);
-
-      for (var l=0;l<mentions.handles.length;l++) {
-          console.log(mentions.handles[l].user);
-          if (!mentions.handles[l].self) {
-            mentions.links.push({"source":mentions.handles[0].user,
-            "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
-          }
-      }
-
-      console.log(mentions);
-
-      //jmentions = JSON.stringify(mentions);
-      //console.log(jmentions);
-      jsonfile.writeFile('public/info/mentions.json', mentions, function (err) {
-        console.error(err);
-      });
-      res.status(200).render('timeline', {title:'Timeline',
-        tweets: text, favs: favs, retweets:retweets, test:tweets,
-        user:user, pic:thumbnail, followers:followers,
-        description:description, mentions:mentions});
-    } else {
-      res.status(500).json({ error: error });
     }
-  });
+
+    async.forEach(contacts, function(contact, callback) {
+      client.get('statuses/user_timeline', { screen_name: contact, count: 320},function(error, tweets, response) {
+            if (!error) {
+              console.log("Tweets Crawled Successfully!");
+              var mentions={};mentions.handles=[];mentions.links=[];
+              var matched=[];
+              var pattern = /\B@[a-z0-9_-]+/gi;
+              for(var i = 0; i < tweets.length;i++) {
+                var stringMatch = (tweets[i].text).match(pattern);
+                if (!!stringMatch) {
+                  for (var j = 0; j < stringMatch.length;j++) {
+                    var arrayMatch = stringMatch[j];
+                    if (mentions.handles.length === 0) {
+                      if (arrayMatch != ("@" + twitter_handle)){
+                        mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                        matched.push(arrayMatch);
+                      } else {
+                        mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                        matched.push(arrayMatch);
+                      }
+                    } else {
+                        if(matched.indexOf(arrayMatch) >= 0) {
+                          for (var k=0;k<mentions.handles.length;k++) {
+                            if (mentions.handles[k].user === arrayMatch){
+                              mentions.handles[k].count = mentions.handles[k].count + 1;
+                            }
+                          }
+                        } else {
+                          if (arrayMatch != ("@" + twitter_handle)){
+                            mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                            matched.push(arrayMatch);
+                          } else {
+                            mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                            matched.push(arrayMatch);
+                          }
+                        }
+                    }
+                  }
+                }
+              }
+
+              //Sort mentions in descending order
+              mentions.handles.sort(function(a, b) {
+                  return parseFloat(b.count) - parseFloat(a.count);
+              });
+              mentions.handles = mentions.handles.slice(0,5);
+
+              for (var l=0;l<mentions.handles.length;l++) {
+                  console.log(mentions.handles[l].user);
+                  if (!mentions.handles[l].self) {
+                    mentions.links.push({"source":mentions.handles[0].user,
+                    "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
+                  }
+              }
+              console.log(mentions);
+            } else {
+              console.log(error);
+            }
+          }); //GET ends
+          //callback(null, mentions);
+    }, function(err) { //ASYNC For each ends
+      if (err) return callback(err);
+    });
+    res.status(200).render('timeline', {title:'Timeline'});
 });
+
+      //Crawl each of the 10 mentions and add to main mentions dictionary
+      // function(full_mentions, callback) {
+      //   var contacts = [];
+      //   for (var i=0;i<full_mentions.handles.length;i++) {
+      //     if (!full_mentions.handles[i].self) {
+      //       contacts.push(full_mentions.handles[i].user);
+      //     }
+      //   }
+      //
+      //   async.forEach(contacts, function(contact, callback) {
+      //     client.get('statuses/user_timeline', { screen_name: contact, count: 320},function(error, tweets, response) {
+      //           if (!error) {
+      //             console.log("Tweets Crawled Successfully!");
+      //             console.log(tweets[0]);
+      //             console.log(full_mentions);
+      //             var mentions={};mentions.handles=[];mentions.links=[];
+      //             var matched=[];
+      //             var pattern = /\B@[a-z0-9_-]+/gi;
+      //             for(var i = 0; i < tweets.length;i++) {
+      //               var stringMatch = (tweets[i].text).match(pattern);
+      //               if (!!stringMatch) {
+      //                 for (var j = 0; j < stringMatch.length;j++) {
+      //                   var arrayMatch = stringMatch[j];
+      //                   if (mentions.handles.length === 0) {
+      //                     if (arrayMatch != ("@" + twitter_handle)){
+      //                       mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+      //                       matched.push(arrayMatch);
+      //                     } else {
+      //                       mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+      //                       matched.push(arrayMatch);
+      //                     }
+      //                   } else {
+      //                       if(matched.indexOf(arrayMatch) >= 0) {
+      //                         for (var k=0;k<mentions.handles.length;k++) {
+      //                           if (mentions.handles[k].user === arrayMatch){
+      //                             mentions.handles[k].count = mentions.handles[k].count + 1;
+      //                           }
+      //                         }
+      //                       } else {
+      //                         if (arrayMatch != ("@" + twitter_handle)){
+      //                           mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+      //                           matched.push(arrayMatch);
+      //                         } else {
+      //                           mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+      //                           matched.push(arrayMatch);
+      //                         }
+      //                       }
+      //                   }
+      //                 }
+      //               }
+      //             }
+      //
+      //             //Sort mentions in descending order
+      //             mentions.handles.sort(function(a, b) {
+      //                 return parseFloat(b.count) - parseFloat(a.count);
+      //             });
+      //             mentions.handles = mentions.handles.slice(0,5);
+      //
+      //             for (var l=0;l<mentions.handles.length;l++) {
+      //                 console.log(mentions.handles[l].user);
+      //                 if (!mentions.handles[l].self) {
+      //                   mentions.links.push({"source":mentions.handles[0].user,
+      //                   "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
+      //                 }
+      //             }
+      //             console.log(mentions);
+      //           } else {
+      //             console.log(error);
+      //           }
+      //         }); //GET ends
+      //         //callback(null, mentions);
+      //   }, function(err) { //ASYNC For each ends
+      //     if (err) return callback(err);
+      //   });
+      //   callback(null, mentions);
+      // } //2nd crawling function ends
+
+  // async.parallel([
+  //
+  //   function(next) {
+  //     client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320},function(error, tweets, response) {
+  //       if (!error) {
+  //         console.log("Tweets Crawled Successfully!");
+  //         var test = tweets[2].text;
+  //       } else {
+  //         console.log(error);
+  //       }
+  //       next(null, test);
+  //     });
+  //   },
+  //
+  //   function(next) {
+  //
+  //     //Wanna do for each guy in tweets, client.get etc
+  //     client.get('statuses/user_timeline',{ screen_name: twitter_handle, count: 5},function(error, tweets, response) {
+  //       if (!error) {
+  //         console.log(test);
+  //       } else {
+  //         console.log(error);
+  //       }
+  //       next(null, tweets[1].text);
+  //     });
+  //   }
+  //
+  // ], function(err, results) {
+  //   // results is [firstData, secondData]
+  //   console.log(results[0]);
+  //   res.status(200).render('timeline', {title:'Index'});
+  // });
+
+
+// router.get('/', function(req, res, next) {
+//   var twitter_handle = req.param('username');
+//   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
+//     if (!error) {
+//       var favs=[];var text=[];var retweets=[];
+//       var thumbnail = tweets[0].user.profile_image_url;
+//       var user = tweets[0].user.name;
+//       var description = tweets[0].user.description;
+//       var followers = tweets[0].user.followers_count;
+//       var mentions={}; mentions.handles = []; mentions.links = [];
+//       var matched=[];
+//       var pattern = /\B@[a-z0-9_-]+/gi;
+//       for(var i = 0; i < tweets.length;i++) {
+//         text[i] = tweets[i].text;
+//         favs[i] = tweets[i].favorite_count;
+//         retweets[i] = tweets[i].retweet_count;
+//         var stringMatch = (tweets[i].text).match(pattern);
+//         if (!!stringMatch) {
+//           for (var j = 0; j < stringMatch.length;j++) {
+//             var arrayMatch = stringMatch[j];
+//             if (mentions.handles.length === 0) {
+//               if (arrayMatch != ("@" + twitter_handle)){
+//                 mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+//                 matched.push(arrayMatch);
+//               } else {
+//                 mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+//                 matched.push(arrayMatch);
+//               }
+//             } else {
+//                 if(matched.indexOf(arrayMatch) >= 0) {
+//                   for (var k=0;k<mentions.handles.length;k++) {
+//                     if (mentions.handles[k].user === arrayMatch){
+//                       mentions.handles[k].count = mentions.handles[k].count + 1;
+//                     }
+//                   }
+//                 } else {
+//                   if (arrayMatch != ("@" + twitter_handle)){
+//                     mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+//                     matched.push(arrayMatch);
+//                   } else {
+//                     mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+//                     matched.push(arrayMatch);
+//                   }
+//                 }
+//             }
+//           }
+//         }
+//       }
+//
+//       //Sort mentions in descending order
+//       mentions.handles.sort(function(a, b) {
+//           return parseFloat(b.count) - parseFloat(a.count);
+//       });
+//       mentions.handles = mentions.handles.slice(0,11);
+//       console.log(mentions);
+//
+//       for (var l=0;l<mentions.handles.length;l++) {
+//           console.log(mentions.handles[l].user);
+//           if (!mentions.handles[l].self) {
+//             mentions.links.push({"source":mentions.handles[0].user,
+//             "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
+//           }
+//       }
+//
+//       console.log(mentions);
+//
+//       //jmentions = JSON.stringify(mentions);
+//       //console.log(jmentions);
+//       jsonfile.writeFile('public/info/mentions.json', mentions, function (err) {
+//         console.error(err);
+//       });
+//     }
+//   });
+//   console.log("xxxx");
+//   res.status(200).render('timeline', {title:'Timeline',
+//     tweets: text, favs: favs, retweets:retweets, test:tweets,
+//     user:user, pic:thumbnail, followers:followers,
+//     description:description, mentions:mentions});
+//   //res.status(500).json({ error: error });
+// });
 
 module.exports = router;
 
