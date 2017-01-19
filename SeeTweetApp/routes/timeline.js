@@ -46,11 +46,13 @@ router.get('/',function(req,res) {
         } else {
           console.log(error);
         }
+        console.log("1");
+        callback(null, tweets);
       });
-      callback(null, tweets);
     },
 
     function(tweets, callback) {
+      console.log("1");
       var mentions={};mentions.handles=[];mentions.links=[];
       var matched=[];
       var pattern = /\B@[a-z0-9_-]+/gi;
@@ -87,6 +89,7 @@ router.get('/',function(req,res) {
           }
         }
       }
+      console.log("1");
 
       //Sort mentions in descending order
       mentions.handles.sort(function(a, b) {
@@ -100,11 +103,13 @@ router.get('/',function(req,res) {
             "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
           }
       }
+      console.log("1");
       // arg1 now equals 'one' and arg2 now equals 'two'
       callback(null, mentions, matched);
     },
 
-    function(mentions, matched) {
+    function(mentions, matched, callback) {
+        console.log("1");
         console.log(mentions);
         console.log(matched);
         callback(null, mentions);
@@ -112,11 +117,11 @@ router.get('/',function(req,res) {
 
   ], function (err, result) {
       // result now equals 'done'
+      console.log("1");
       console.log(result);
       res.status(200).render('timeline');
   });
 });
-
 
 module.exports = router;
 
