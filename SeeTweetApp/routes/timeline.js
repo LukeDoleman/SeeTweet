@@ -34,6 +34,9 @@ var async = require('async');
 
 //Get JSON of most frequently contacted users for graph
 //including profile image & link
+
+
+
 router.get('/',function(req,res) {
   var twitter_handle = req.param('username');
 
@@ -109,16 +112,82 @@ router.get('/',function(req,res) {
     },
 
     function(mentions, matched, callback) {
-        console.log("1");
-        console.log(mentions);
-        console.log(matched);
+        async.forEach(mentions.handles,function(mention,callback) {
+          console.log(".");
+          console.log(mention.user);
+          client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
+            if (!error) {
+              console.log("Tweets Crawled Successfully!");
+              var temp_mentions={};temp_mentions.handles=[];temp_mentions.links=[];
+              var matched=[];
+              var pattern = /\B@[a-z0-9_-]+/gi;
+              for(var i = 0; i < tweets.length;i++) {
+                var stringMatch = (tweets[i].text).match(pattern);
+                if (!!stringMatch) {
+                  for (var j = 0; j < stringMatch.length;j++) {
+                    var arrayMatch = stringMatch[j];
+                    if (temp_mentions.handles.length === 0) {
+                      if (arrayMatch != ("@" + mention.user)){
+                        temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                        matched.push(arrayMatch);
+                      } else {
+                        temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                        matched.push(arrayMatch);
+                      }
+                    } else {
+                        if(matched.indexOf(arrayMatch) >= 0) {
+                          for (var k=0;k<temp_mentions.handles.length;k++) {
+                            if (temp_mentions.handles[k].user === arrayMatch){
+                              temp_mentions.handles[k].count = temp_mentions.handles[k].count + 1;
+                            }
+                          }
+                        } else {
+                          if (arrayMatch != ("@" + twitter_handle)){
+                            temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
+                            matched.push(arrayMatch);
+                          } else {
+                            temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":true});
+                            matched.push(arrayMatch);
+                          }
+                        }
+                    }
+                  }
+                }
+              }
+
+              //Sort mentions in descending order
+              temp_mentions.handles.sort(function(a, b) {
+                  return parseFloat(b.count) - parseFloat(a.count);
+              });
+              temp_mentions.handles = temp_mentions.handles.slice(0,4);
+
+              for (var l=0;l<temp_mentions.handles.length;l++) {
+                  if (!temp_mentions.handles[l].self) {
+                    temp_mentions.links.push({"source":temp_mentions.handles[0].user,
+                    "target":temp_mentions.handles[l].user, "weight":temp_mentions.handles[l].count});
+                  }
+              }
+              console.log(temp_mentions);
+            } else {
+              console.log(error);
+            }
+          });
+          callback();
+        }, function(err) {
+          if (err) return callback(err);
+        });
         callback(null, mentions);
-    }
+    },
+
+    function(mentions, callback) {
+      console.log(mentions);
+      callback(null, mentions);
+    },
 
   ], function (err, result) {
       // result now equals 'done'
-      console.log("1");
-      console.log(result);
+      //console.log("1");
+      //console.log(result);
       res.status(200).render('timeline');
   });
 });
