@@ -45,7 +45,7 @@ router.get('/',function(req,res) {
     function(callback) {
       client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320},function(error, tweets, response) {
         if (!error) {
-          console.log("Tweets Crawled Successfully!");
+          console.log("First Tweets Crawled Successfully!");
         } else {
           console.log(error);
         }
@@ -112,22 +112,25 @@ router.get('/',function(req,res) {
     },
 
     function(mentions, matched, callback) {
-        async.forEach(mentions.handles,function(mention,callback) {
+        var full_mentions = mentions;
+        async.forEach(full_mentions.handles,function(mention,next) {
           console.log(".");
           console.log(mention.user);
           client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
             if (!error) {
-              console.log("Tweets Crawled Successfully!");
+              console.log("Second Tweets Crawled Successfully!");
               var temp_mentions={};temp_mentions.handles=[];temp_mentions.links=[];
-              var matched=[];
+              //var matched=[];
               var pattern = /\B@[a-z0-9_-]+/gi;
               for(var i = 0; i < tweets.length;i++) {
                 var stringMatch = (tweets[i].text).match(pattern);
                 if (!!stringMatch) {
                   for (var j = 0; j < stringMatch.length;j++) {
                     var arrayMatch = stringMatch[j];
+                    // console.log(arrayMatch);
+                    // console.log(mention.user);
                     if (temp_mentions.handles.length === 0) {
-                      if (arrayMatch != ("@" + mention.user)){
+                      if (arrayMatch != (mention.user)){
                         temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
                         matched.push(arrayMatch);
                       } else {
@@ -142,7 +145,7 @@ router.get('/',function(req,res) {
                             }
                           }
                         } else {
-                          if (arrayMatch != ("@" + twitter_handle)){
+                          if (arrayMatch != (mention.user)){
                             temp_mentions.handles.push({"user":arrayMatch,"count":1, "self":false});
                             matched.push(arrayMatch);
                           } else {
@@ -167,27 +170,37 @@ router.get('/',function(req,res) {
                     "target":temp_mentions.handles[l].user, "weight":temp_mentions.handles[l].count});
                   }
               }
-              console.log(temp_mentions);
+
+              for (var m=0;m<temp_mentions.handles.length;m++) {
+                full_mentions.handles.push(temp_mentions.handles[m]);
+              }
+
+            console.log(full_mentions);
+
             } else {
               console.log(error);
             }
           });
-          callback();
+          next();
+
         }, function(err) {
           if (err) return callback(err);
         });
-        callback(null, mentions);
+
+        console.log(full_mentions);
+        callback(null, full_mentions);
     },
 
-    function(mentions, callback) {
-      console.log(mentions);
-      callback(null, mentions);
+    function(full_mentions, callback) {
+      console.log("test");
+      console.log(full_mentions);
+      callback(null, full_mentions);
     },
 
   ], function (err, result) {
       // result now equals 'done'
-      //console.log("1");
-      //console.log(result);
+      console.log("1");
+      console.log(result);
       res.status(200).render('timeline');
   });
 });
