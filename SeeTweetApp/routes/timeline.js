@@ -10,20 +10,6 @@ var client = new Twitter({
 var jsonfile = require('jsonfile');
 var async = require('async');
 
-// var file = 'mentions.json';
-
-//router.get() {
-//  twitter.get() {
-//    do nonsense
-//  }
-//  twitter.get() {
-//    do nonsense
-//  }
-//  twitter.get() {
-//    do nonsense
-//  }
-//  res.render(results)
-
 //Find initial 10 mentions
 //For each mention
   //Crawl their 5 most frequently contacted and add to master mentions list
@@ -31,11 +17,8 @@ var async = require('async');
 
 // http://www.sebastianseilund.com/nodejs-async-in-practice
 
-
 //Get JSON of most frequently contacted users for graph
 //including profile image & link
-
-
 
 router.get('/',function(req,res) {
   var twitter_handle = req.param('username');
@@ -49,13 +32,11 @@ router.get('/',function(req,res) {
         } else {
           console.log(error);
         }
-        console.log("1");
         callback(null, tweets);
       });
     },
 
     function(tweets, callback) {
-      console.log("1");
       var mentions={};mentions.handles=[];mentions.links=[];
       var matched=[];
       var pattern = /\B@[a-z0-9_-]+/gi;
@@ -92,8 +73,6 @@ router.get('/',function(req,res) {
           }
         }
       }
-      console.log("1");
-
       //Sort mentions in descending order
       mentions.handles.sort(function(a, b) {
           return parseFloat(b.count) - parseFloat(a.count);
@@ -106,16 +85,16 @@ router.get('/',function(req,res) {
             "target":mentions.handles[l].user, "weight":mentions.handles[l].count});
           }
       }
-      console.log("1");
-      // arg1 now equals 'one' and arg2 now equals 'two'
       callback(null, mentions, matched);
     },
 
     function(mentions, matched, callback) {
         var full_mentions = mentions;
+        var len = full_mentions.handles.length;
+        var x = 1;
         async.forEach(full_mentions.handles,function(mention,next) {
-          console.log(".");
           console.log(mention.user);
+          console.log(full_mentions.handles.length);
           client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
             if (!error) {
               console.log("Second Tweets Crawled Successfully!");
@@ -173,6 +152,7 @@ router.get('/',function(req,res) {
 
               for (var m=0;m<temp_mentions.handles.length;m++) {
                 full_mentions.handles.push(temp_mentions.handles[m]);
+                full_mentions.links.push(temp_mentions.links[m]);
               }
 
             console.log(full_mentions);
@@ -180,15 +160,18 @@ router.get('/',function(req,res) {
             } else {
               console.log(error);
             }
+            if (x == len) {
+              console.log(x,len);
+              callback(null, full_mentions);
+            } else {
+              console.log(x,len);
+              x++;
+              next();
+            }
           });
-          next();
-
         }, function(err) {
           if (err) return callback(err);
         });
-
-        console.log(full_mentions);
-        callback(null, full_mentions);
     },
 
     function(full_mentions, callback) {
@@ -199,8 +182,11 @@ router.get('/',function(req,res) {
 
   ], function (err, result) {
       // result now equals 'done'
-      console.log("1");
+      console.log("RESULT");
       console.log(result);
+      jsonfile.writeFile('public/info/mentions.json', result, function (err) {
+        console.error(err);
+      });
       res.status(200).render('timeline');
   });
 });
