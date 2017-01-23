@@ -13,8 +13,6 @@ var simulation = d3.forceSimulation()
 
 d3.json('info/mentions.json', function(error, jpeople) {
   console.log(error);
-  // var jpeople = JSON.parse(people);
-  //var jpeople = people;
   console.log(jpeople.handles[0]);
 
   var link = svg.append("g")
