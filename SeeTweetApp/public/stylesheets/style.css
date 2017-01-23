@@ -36,7 +36,9 @@ header p {
   background-color: transparent;
 }
 
-.links line {
-  stroke: #999;
+/*<line class="links" x1="478.6307571311368" y1="298.5003408082626" x2="412.62552337319073" y2="286.504312969463"></line>*/
+
+line {
+  stroke: #333;
   stroke-opacity: 0.6;
 }

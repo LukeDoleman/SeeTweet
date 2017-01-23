@@ -15,20 +15,42 @@ d3.json('info/mentions.json', function(error, jpeople) {
   console.log(error);
   console.log(jpeople.handles[0]);
 
-  var link = svg.append("g")
-      .attr("class", "links")
-      .selectAll("line")
-      .data(jpeople.links)
-      .enter().append("line")
-      .attr("stroke-width", function(d) {return d.count;});
+    //
+    // var link = svg.selectAll(".link")
+    //     .data(json.links)
+    //   .enter().append("line")
+    //     .attr("class", "link");
+    //
+    // var node = svg.selectAll(".node")
+    //     .data(json.nodes)
+    //   .enter().append("g")
+    //     .attr("class", "node")
+    //     .call(force.drag);
 
-  var node = svg.append("g")
-      .attr("class", "nodes")
-      .selectAll("circle")
-      .data(jpeople.handles)
-      .enter().append("circle")
-      .attr("r", 5)
-      .attr("fill", "purple");
+    var link = svg.selectAll(".link")
+        .data(jpeople.links)
+      .enter().append("line")
+        .attr("class", "links")
+        .attr("stroke-width", function(d) {return d.count;});
+
+    var node = svg.selectAll(".node")
+        .data(jpeople.handles)
+      .enter().append("g")
+        .attr("class", "node");
+
+      //.attr("class", "nodes")
+      //.selectAll("circle")
+      //.data(jpeople.handles)
+      //.enter().append("circle")
+      // .attr("r", 5)
+      // .attr("fill", "purple");
+
+    node.append("image")
+      .attr("xlink:href", "https://github.com/favicon.ico")
+      .attr("x", -8)
+      .attr("y", -8)
+      .attr("width", 16)
+      .attr("height", 16);
 
     node.append("title")
         .text(function(d) { return d.user; });
@@ -48,7 +70,8 @@ d3.json('info/mentions.json', function(error, jpeople) {
             .attr("y2", function(d) { return d.target.y; });
         node
             .attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
+            .attr("cy", function(d) { return d.y; })
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
       }
 
   });

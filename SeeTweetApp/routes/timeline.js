@@ -24,7 +24,6 @@ router.get('/',function(req,res) {
   var twitter_handle = req.param('username');
 
   async.waterfall([
-
     function(callback) {
       client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320},function(error, tweets, response) {
         if (!error) {
@@ -73,12 +72,16 @@ router.get('/',function(req,res) {
           }
         }
       }
+
       //Sort mentions in descending order
       mentions.handles.sort(function(a, b) {
           return parseFloat(b.count) - parseFloat(a.count);
       });
+
+      //Extract the 10 mentions and the user handle
       mentions.handles = mentions.handles.slice(0,11);
 
+      //Create links for each handle
       for (var l=0;l<mentions.handles.length;l++) {
           if (!mentions.handles[l].self) {
             mentions.links.push({"source":mentions.handles[0].user,
@@ -173,21 +176,13 @@ router.get('/',function(req,res) {
             }
           });
         }
-        }, function(err) {
-          if (err) return callback(err);
-        });
+      }, function(err) {
+        if (err) return callback(err);
+      });
     },
 
-    // function(full_mentions, callback) {
-    //   callback(null, full_mentions);
-    // },
-
   ], function (err, result) {
-      // result now equals 'done'
-      console.log("RESULT");
-      console.log(result);
       jsonfile.writeFile('public/info/mentions.json', result, function (err) {
-        console.log("yo x");
         console.error(err);
       });
       res.status(200).render('timeline', {title: 'Home'});
