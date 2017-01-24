@@ -46,7 +46,7 @@ d3.json('info/mentions.json', function(error, jpeople) {
       // .attr("fill", "purple");
 
     node.append("image")
-      .attr("xlink:href", "https://github.com/favicon.ico")
+      .attr("xlink:href", function(d) { return d.picture; })
       .attr("x", -8)
       .attr("y", -8)
       .attr("width", 16)

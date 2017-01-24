@@ -93,8 +93,7 @@ router.get('/',function(req,res) {
 
     function(mentions, matched, callback) {
         var full_mentions = mentions;
-        var len = full_mentions.handles.length - 1;
-        var x = 1;
+        var len = full_mentions.handles.length - 1; var x = 1;
         async.forEach(full_mentions.handles,function(mention,next) {
           if (mention.user != ("@" + twitter_handle)) {
             client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
@@ -161,19 +160,15 @@ router.get('/',function(req,res) {
                   full_mentions.handles.push(temp_mentions.handles[m]);
                   full_mentions.links.push(temp_mentions.links[m]);
                 }
-
-                console.log(mention.user);
-                console.log(temp_mentions);
-
               } else {
                 console.log(error);
               }
-            if (x == len) {
-              callback(null, full_mentions);
-            } else {
-              x++;
-              next();
-            }
+              if (x == len) {
+                callback(null, full_mentions);
+              } else {
+                x++;
+                next();
+              }
           });
         }
       }, function(err) {
@@ -181,11 +176,37 @@ router.get('/',function(req,res) {
       });
     },
 
-  ], function (err, result) {
-      jsonfile.writeFile('public/info/mentions.json', result, function (err) {
-        console.error(err);
+    function(full_mentions, callback) {
+      console.log("white ferrari");
+      var len = full_mentions.handles.length; var x = 1;
+      async.forEach(full_mentions.handles,function(mention,next) {
+        client.get('users/show', { screen_name: mention.user},function(error, info, response) {
+          if (!error) {
+            console.log(mention);
+            console.log(info.profile_image_url);
+            full_mentions.handles[x-1].picture=info.profile_image_url;
+          } else {
+            console.log(err);
+          }
+          if (x == len) {
+            callback(null, full_mentions);
+          } else {
+            x++;
+            next();
+          }
+        });
+      }, function(err) {
+        if (err) return callback(err);
       });
-      res.status(200).render('timeline', {title: 'Home'});
+    },
+
+  ], function (err, result) {
+    console.log("END POINT ---------------------------------");
+    console.log(result);
+    jsonfile.writeFile('public/info/mentions.json', result, function (err) {
+      console.error(err);
+    });
+    res.status(200).render('timeline', {title: 'Home'});
   });
 });
 
