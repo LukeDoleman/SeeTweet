@@ -1,6 +1,11 @@
 extends layout
 
+block head
+  p See Tweet
+
 block main
+  svg(style="display:block;margin:auto;border: 1px solid #999" width="960" height="600")
+
   //- div.col-lg-12(class="vcenter")
   //-   div.panel.panel-default
   //-     div.panel-heading
@@ -12,7 +17,6 @@ block main
   //-         span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
   //-     -}
 
-  svg(style="display:block;margin:auto;border: 1px solid #999" width="960" height="600")
 
   //- var svg = d3.select("svg"),
   //-   width = +svg.attr("width"),
