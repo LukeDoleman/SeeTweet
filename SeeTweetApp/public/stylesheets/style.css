@@ -2,7 +2,12 @@ body {
 
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 
-  background: linear-gradient(270deg, #18f0b8, #18a2f0, #db5640);
+  background: #c0c0aa; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #c0c0aa , #1ce); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #c0c0aa , #1ce); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+  /*background: linear-gradient(270deg, #18f0b8, #18a2f0, #db5640);
 	background-size: 600% 600%;
 	-webkit-animation: Gradient 60s ease infinite;
 	-moz-animation: Gradient 60s ease infinite;
@@ -23,25 +28,32 @@ body {
 	0%{background-position:0% 50%}
 	50%{background-position:100% 50%}
 	100%{background-position:0% 50%}
-}
+}*/
 
 .navbar-default .navbar-brand a {
-  color:black; !important
+  color:black;
+}
+
+.navbar-default {
+  background:none;
+  border:none;
 }
 
 /* Centered Brand */
 .navbar-brand {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
-    text-align: center;
-    margin: auto;
-    color:black;
+  float: none; !important
 }
-.navbar-toggle {
-    z-index:3;
+
+.navbar-center {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  text-align: center;
+  margin: auto;
+  height:100%;
 }
+
 
 /**/
 
@@ -68,14 +80,20 @@ header p {
 
 .input-group-btn > .btn {
   border-radius: 0px;
-  border-color: #ccc;
-  color:#999
+  border-color: #111;
+  color: #111
+}
+
+.input-group-lg>.input-group-btn>.btn {
+  border-radius: 0px;
 }
 
 .input-group .form-control {
   border-radius: 0px;
+  border-color: #111;
   box-shadow: none;
   background-color: transparent;
+  color: #111;
 }
 
 /*<line class="links" x1="478.6307571311368" y1="298.5003408082626" x2="412.62552337319073" y2="286.504312969463"></line>*/
