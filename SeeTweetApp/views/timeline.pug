@@ -18,7 +18,7 @@ block head
           a(href='#')
             span.glyphicon.glyphicon-home
         li
-          a(href='#') Your Profile
+          a(href='profile') Your Profile
         li
           a(href='#') Statistics
         //- li
@@ -37,10 +37,12 @@ block head
     //-         li.divider
     //-         li
     //-           a(href='#') Separated link
-    // /.navbar-collapse
+    //-navbar-collapse
 
 block main
   svg(style="display:block;margin:auto;" width="960" height="600")
+  //- div.col-lg-6
+  //-   p xox oxox xoxo
 
   //- div.col-lg-12(class="vcenter")
   //-   div.panel.panel-default
@@ -52,15 +54,3 @@ block main
   //-       div.panel-body
   //-         span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
   //-     -}
-
-
-  //- var svg = d3.select("svg"),
-  //-   width = +svg.attr("width"),
-  //-   height = +svg.attr("height");
-  //-
-  //- var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-  //- var simulation = d3.forceSimulation()
-  //-     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-  //-     .force("charge", d3.forceManyBody())
-  //-     .force("center", d3.forceCenter(width / 2, height / 2));

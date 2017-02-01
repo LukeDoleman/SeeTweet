@@ -1,37 +1,12 @@
 body {
-
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-
   background: #c0c0aa; /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #c0c0aa , #1ce); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #c0c0aa , #1ce); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
-  /*background: linear-gradient(270deg, #18f0b8, #18a2f0, #db5640);
-	background-size: 600% 600%;
-	-webkit-animation: Gradient 60s ease infinite;
-	-moz-animation: Gradient 60s ease infinite;
-	animation: Gradient 60s ease infinite;
 }
 
-@-webkit-keyframes Gradient {
-	0%{background-position:0% 50%}
-	50%{background-position:100% 50%}
-	100%{background-position:0% 50%}
-}
-@-moz-keyframes Gradient {
-	0%{background-position:0% 50%}
-	50%{background-position:100% 50%}
-	100%{background-position:0% 50%}
-}
-@keyframes Gradient {
-	0%{background-position:0% 50%}
-	50%{background-position:100% 50%}
-	100%{background-position:0% 50%}
-}*/
-
-.navbar-default .navbar-brand a {
-  color:black;
+.navbar-default .navbar-brand:hover {
+  color: #111;
 }
 
 .navbar-default {
@@ -54,30 +29,6 @@ body {
   height:100%;
 }
 
-
-/**/
-
-/* Vertical alignment test
-
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
-
-.flexbox {
- display:flex;
- justify-content:center;
- align-items: center;
- flex-flow: column;
-}*/
-
-/* Styling for the header and search regions */
-header p {
-  font-size:24px;
-  text-align: center;
-}
-
 .input-group-btn > .btn {
   border-radius: 0px;
   border-color: #111;
@@ -95,8 +46,6 @@ header p {
   background-color: transparent;
   color: #111;
 }
-
-/*<line class="links" x1="478.6307571311368" y1="298.5003408082626" x2="412.62552337319073" y2="286.504312969463"></line>*/
 
 line {
   stroke: #333;

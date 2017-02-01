@@ -4,24 +4,18 @@ var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
+console.log(width + " " + height);
+
 var simulation = d3.forceSimulation()
     // .force("link", d3.forceLink().distance(function(d) {return d.weight;}))   //function(d) {return d.distance;}).strength(0.1))
     .force("link", d3.forceLink().id(function(d) {
           return d.user;
     }))
-        // }).strength(function(d) {
-        //   if (d.stage === "second") {
-        //     console.log("yes");
-        //     return 1;
-        //   }
-
     .force("charge", d3.forceManyBody()) //.strength((function(d) {
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json('info/mentions.json', function(error, jpeople) {
     console.log(error);
-    console.log(jpeople.handles[0]);
-
     var link = svg.selectAll(".link")
         .data(jpeople.links)
       .enter().append("line")
