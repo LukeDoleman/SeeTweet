@@ -161,7 +161,6 @@ router.get('/',function(req,res) {
         }
       }, function(err) {
         if (err) {
-          console.log("BAD NEWS BAD NEWS BAD NEWS");
           return callback(err);
         }
       });
@@ -193,7 +192,7 @@ router.get('/',function(req,res) {
     jsonfile.writeFile('public/info/mentions.json', result, function (err) {
       console.error(err);
     });
-    res.status(200).render('timeline', {title: 'Home'});
+    res.status(200).render('timeline', {title: 'Home', result:result});
   });
 });
 
