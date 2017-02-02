@@ -15,6 +15,7 @@ var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json('info/mentions.json', function(error, jpeople) {
+    console.log(jpeople.handles[0]);
     console.log(error);
     var link = svg.selectAll(".link")
         .data(jpeople.links)

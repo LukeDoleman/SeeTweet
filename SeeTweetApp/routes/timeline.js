@@ -83,7 +83,6 @@ router.get('/',function(req,res) {
         var len = full_mentions.handles.length; var x = 1;
         async.forEach(full_mentions.handles,function(mention,next) {
           if (mention.user.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
-            console.log(mention.user + "< < <");
             client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
               if (!error) {
                 console.log(mention.user + " - Second Tweets Crawled Successfully!");
