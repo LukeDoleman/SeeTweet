@@ -6,19 +6,12 @@ var svg = d3.select("svg"),
 var jpeople = local_data;
 
 var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().distance(function(d) {
-      if (d) {
-        return 200;
-      }
-    }))   //function(d) {return d.distance;}).strength(0.1))
+    .force("link", d3.forceLink())   //function(d) {return d.distance;}).strength(0.1))
     .force("link", d3.forceLink().id(function(d) {
           return d.user;
     }))
     // .strength(-400))
-    .force("charge", d3.forceManyBody().strength(function(d) {
-      //console.log(-2*d.count);
-      return -2*d.count;
-    }))
+    .force("charge", d3.forceManyBody().strength(-125))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 

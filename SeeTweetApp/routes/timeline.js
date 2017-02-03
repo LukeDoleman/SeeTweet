@@ -85,6 +85,7 @@ router.get('/',function(req,res) {
           if (mention.user.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
             client.get('statuses/user_timeline', { screen_name: mention.user, count: 320},function(error, tweets, response) {
               if (!error) {
+                console.log(x);
                 console.log(mention.user + " - Second Tweets Crawled Successfully!");
                 var temp_mentions={};temp_mentions.handles=[];temp_mentions.links=[];
                 var matched=[];
@@ -142,10 +143,17 @@ router.get('/',function(req,res) {
                     }
                 }
 
-                for (var m=0;m<temp_mentions.handles.length;m++) {
-                  full_mentions.handles.push(temp_mentions.handles[m]);
-                  full_mentions.links.push(temp_mentions.links[m]);
+                //Ensure at least one other profile was found and add to
+                //full list of mentions.
+                if (temp_mentions.handles.length !== 0) {
+                  for (var m=0;m<temp_mentions.handles.length;m++) {
+                    full_mentions.handles.push(temp_mentions.handles[m]);
+                    full_mentions.links.push(temp_mentions.links[m]);
+                  }
+                } else {
+                  console.log(temp_mentions.handles.length);
                 }
+
               } else {
                 console.log(error);
               }
