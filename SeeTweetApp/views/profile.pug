@@ -28,7 +28,7 @@ block main
       div.panel-heading
         h3.panel-title
           img(src=pic)
-          span  #{user} | Followers: #{followers}<br><br> #{description} <br> #{mentions}
+          span  #{user} #{followers} <br><br> #{description} <br> #{mentions}
       -for(var i = 0; i < 320; ++i){
         div.panel-body
           span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>

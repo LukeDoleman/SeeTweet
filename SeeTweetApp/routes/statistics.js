@@ -11,20 +11,25 @@ var jsonfile = require('jsonfile');
 var async = require('async');
 
 router.get('/', function(req, res, next) {
-  var twitter_handle = req.param('username');
-  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
+  // var twitter_handle = req.param('username');
+  client.get('statuses/user_timeline', { screen_name: "potus", count: 320}, function(error, tweets, response) {
     if (!error) {
       var favs=[];var text=[];var retweets=[];
       var thumbnail = tweets[0].user.profile_image_url;
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
       var followers = tweets[0].user.followers_count;
+      var max = tweets[0];
       for(var i = 0; i < tweets.length;i++) {
         text[i] = tweets[i].text;
         favs[i] = tweets[i].favorite_count;
         retweets[i] = tweets[i].retweet_count;
+        if (tweets[i].favorite_count > max.favorite_count) {
+          max = tweets[i];
+        }
+        console.log(tweets[i].favorite_count);
       }
-      res.status(200).render('profile', {title:'Your Profile',
+      res.status(200).render('statistics', {title:'Your Profile',
       tweets: text, favs: favs, retweets:retweets, test:tweets, user:user, pic:thumbnail});
     } else {
       res.status(500).json({ error: error });
