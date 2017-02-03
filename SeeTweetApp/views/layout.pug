@@ -6,6 +6,7 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
 
   body
+
     block head
 
     block main
@@ -15,8 +16,12 @@ script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 script(src="https://d3js.org/d3.v4.min.js")
 script(src="/javascripts/file.js")
 script.
+  //- var user_handle = "@" + !{JSON.stringify(name)};
+  //- console.log(user_handle);
+  //- var full_link = "https://twitter.com/" + user_handle;
+  //- console.log(full_link);
   var local_data =!{JSON.stringify(result)};
-  //- var data = #{result}
-  console.log(local_data.handles);
-script(src="/javascripts/graph.js")
+  //- console.log("why");
+  //- var user_handle = "@" + !{JSON.stringify(name)};
 script(src="//platform.twitter.com/widgets.js")
+script(src="/javascripts/graph.js")

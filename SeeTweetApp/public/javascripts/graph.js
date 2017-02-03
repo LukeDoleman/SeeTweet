@@ -6,7 +6,11 @@ var svg = d3.select("svg"),
 var jpeople = local_data;
 
 var simulation = d3.forceSimulation()
-    // .force("link", d3.forceLink().distance(function(d) {return d.weight;}))   //function(d) {return d.distance;}).strength(0.1))
+    .force("link", d3.forceLink().strength(function(d) {
+      if (d) {
+        return d.weight*2;
+      }
+    }))   //function(d) {return d.distance;}).strength(0.1))
     .force("link", d3.forceLink().id(function(d) {
           return d.user;
     }))
@@ -19,14 +23,14 @@ console.log(jpeople.handles[0]);
 var link = svg.selectAll(".link")
     .data(jpeople.links)
   .enter().append("line")
-    .attr("class", "links");
-    // .attr("stroke-width", function(d) {
-    //   if (d) {
-    //     return d.weight;
-    //   } else {
-    //     return 1;
-    //   }
-    // });
+    .attr("class", "links")
+    .attr("stroke-width", function(d) {
+      if (d) {
+        return d.weight;
+      } else {
+        return 1;
+      }
+    });
 
 var node = svg.selectAll(".node")
     .data(jpeople.handles)
@@ -43,8 +47,13 @@ node.append("image")
   .attr("width", 32)
   .attr("height", 32)
   .on("click", function(d) {
-    location.href = 'https://twitter.com/' + d.user;
-    return;
+    $(document).ready(function(){
+      console.log("xox");
+      var x = document.getElementById('twitter-embed').getAttribute("data-screen-name");
+      console.log(x);
+      // location.href = 'https://twitter.com/' + d.user;
+      return;
+    });
   });
   // node.append("a")
   //   .attr("xlink:href", function(d) {return "https://twitter.com/" + d.user; });

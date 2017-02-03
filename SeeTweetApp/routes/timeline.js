@@ -189,10 +189,9 @@ router.get('/',function(req,res) {
     },
   ], function (err, result) {
     console.log(result);
-    jsonfile.writeFile('public/info/mentions.json', result, function (err) {
-      console.error(err);
-    });
-    res.status(200).render('timeline', {title: 'Home', result:result});
+    //result.handles = result.handles.filter(function(n){ return n !== undefined; });
+    result.links = result.links.filter(function(n){ return n !== undefined; });
+    res.status(200).render('timeline', {title: 'Home', result:result, name:twitter_handle});
   });
 });
 
