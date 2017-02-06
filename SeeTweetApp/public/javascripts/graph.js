@@ -1,6 +1,6 @@
 //http://bl.ocks.org/sathomas/11550728
 var checkExist = setInterval(function() {
-   if ($('#twitter-embed').length) {
+   if ($('#twitter-wrapper').length) {
       console.log("Exists!");
       clearInterval(checkExist);
    }
@@ -17,7 +17,6 @@ var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) {
           return d.user;
     }))
-    // .strength(-400))
     .force("charge", d3.forceManyBody().strength(-125))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -53,30 +52,24 @@ node.append("image")
   .on("click", function(d) {
     $(document).ready(function() {
       if(checkExist) {
-        $("#avril").empty();
+        $("#twitter-wrapper").empty();
         twttr.widgets.createTimeline(
           {
             sourceType: "profile",
             screenName: d.user.substr(1)
           },
-          document.getElementById("avril"),
+          document.getElementById("twitter-wrapper"),
           {
             height: 600,
             chrome: "nofooter",
-            linkColor: "#820bbb",
-            borderColor: "#a80000"
+            linkColor: "#2B7BB9",
+            //borderColor: "#333"
           }
         );
-      } else {
-        console.log("xox");
       }
-      //var x = document.getElementById('twitter-embed').getAttribute("data-screen-name");
-      // location.href = 'https://twitter.com/' + d.user;
       return;
     });
   });
-  // node.append("a")
-  //   .attr("xlink:href", function(d) {return "https://twitter.com/" + d.user; });
 
   node.append("title")
       .text(function(d) { return d.user; });
@@ -87,6 +80,24 @@ node.append("image")
 
   simulation.force("link")
       .links(jpeople.links);
+
+  $(document).ready(function() {
+    if(checkExist) {
+      twttr.widgets.createTimeline(
+        {
+          sourceType: "profile",
+          screenName: jpeople.handles[0].user.substr(1)
+        },
+        document.getElementById("twitter-wrapper"),
+        {
+          height: 600,
+          chrome: "nofooter",
+          linkColor: "#2B7BB9",
+          //borderColor: "#333"
+        }
+      );
+    }
+  });
 
   function ticked() {
       link
@@ -100,16 +111,6 @@ node.append("image")
           .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   }
 
-
-
-
-
-
-
-
-
-
-
   // //http://bl.ocks.org/sathomas/11550728
   //
   // var svg = d3.select("svg"),
@@ -117,8 +118,6 @@ node.append("image")
   //     height = +svg.attr("height");
   //
   // console.log(width + " " + height);
-  //
-  // console.log("BITCH" + local_data.handles[0].user);
   //
   // var simulation = d3.forceSimulation()
   //     // .force("link", d3.forceLink().distance(function(d) {return d.weight;}))   //function(d) {return d.distance;}).strength(0.1))

@@ -5,6 +5,9 @@ $(document).ready(function() {
           var url = document.URL;
           window.location.href = url + 'timeline' + '?' + 'username=' + username;
         }
+        // var e = $('<a> id="twitter-embed" class="twitter-timeline" data-height="600" data-dnt="true" data-screen-name=getName()) Tweets by #{name} ')
+        // $('#twitter-wrapper').append(e);
+        // a(id="twitter-embed" class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/potus" data-screen-name=getName()) Tweets by #{name}
     });
 
     $("#getProfile").click(function() {
@@ -20,6 +23,10 @@ $(document).ready(function() {
       console.log(new_url);
       window.location.href = new_url;
     });
+
+    function getName() {
+      return "potus";
+    }
 
     // var slider = new Slider('#ex2', {});
 
