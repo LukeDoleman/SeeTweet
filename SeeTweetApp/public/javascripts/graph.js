@@ -1,4 +1,11 @@
 //http://bl.ocks.org/sathomas/11550728
+var checkExist = setInterval(function() {
+   if ($('#twitter-embed').length) {
+      console.log("Exists!");
+      clearInterval(checkExist);
+   }
+}, 100); // check every 100ms
+
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -44,13 +51,29 @@ node.append("image")
   .attr("width", 32)
   .attr("height", 32)
   .on("click", function(d) {
-    window.onload = function(){
-      console.log("xox");
-      var x = document.getElementById('twitter-embed').getAttribute("data-screen-name");
-      console.log(x);
+    $(document).ready(function() {
+      if(checkExist) {
+        $("#avril").empty();
+        twttr.widgets.createTimeline(
+          {
+            sourceType: "profile",
+            screenName: d.user.substr(1)
+          },
+          document.getElementById("avril"),
+          {
+            height: 600,
+            chrome: "nofooter",
+            linkColor: "#820bbb",
+            borderColor: "#a80000"
+          }
+        );
+      } else {
+        console.log("xox");
+      }
+      //var x = document.getElementById('twitter-embed').getAttribute("data-screen-name");
       // location.href = 'https://twitter.com/' + d.user;
       return;
-    };
+    });
   });
   // node.append("a")
   //   .attr("xlink:href", function(d) {return "https://twitter.com/" + d.user; });
