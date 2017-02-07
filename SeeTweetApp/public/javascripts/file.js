@@ -5,8 +5,17 @@ $(document).ready(function() {
           var url = document.URL;
           window.location.href = url + 'timeline' + '?' + 'username=' + username;
         }
-        // var e = $('<a> id="twitter-embed" class="twitter-timeline" data-height="600" data-dnt="true" data-screen-name=getName()) Tweets by #{name} ')
-        // $('#twitter-wrapper').append(e);
+
+        // var n = username;
+        // $("#twitter-wrapper").append( '<a id="twitter-embed" ' +
+        //   'class="twitter-timeline" ' +
+        //   'data-height="600" data-dnt="true"' +
+        //   'data-screen-name="' + n + '" href="https://twitter.com/' + n +
+        //   '"> Tweets by @' + n + '</a>' );
+        // $('#twitter-wrapper').append();
+
+//<a class="twitter-timeline" data-height="250" data-dnt="true" data-theme="light" data-link-color="#2B7BB9" href="https://twitter.com/nodejs">Tweets by nodejs</a>
+
         // a(id="twitter-embed" class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/potus" data-screen-name=getName()) Tweets by #{name}
     });
 
@@ -23,11 +32,5 @@ $(document).ready(function() {
       console.log(new_url);
       window.location.href = new_url;
     });
-
-    function getName() {
-      return "potus";
-    }
-
     // var slider = new Slider('#ex2', {});
-
 });

@@ -14,10 +14,6 @@ html
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
 script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
 script(src="https://d3js.org/d3.v4.min.js")
-script(src="/javascripts/file.js")
-script.
-  var local_data =!{JSON.stringify(result)};
-  //- var slider = new Slider('#ex2', {});
 script.
     window.twttr = (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0],
@@ -34,4 +30,24 @@ script.
       };
     return t;
     }(document, "script", "twitter-wjs"));
+script(src="/javascripts/file.js")
+script.
+  var local_data =!{JSON.stringify(result)};
+  //- $(document).ready(function() {
+  //-     $("#twitter-wrapper").empty();
+  //-     twttr.widgets.createTimeline(
+  //-       {
+  //-         sourceType: "profile",
+  //-         screenName: "potus"
+  //-       },
+  //-       document.getElementById("twitter-wrapper"),
+  //-       {
+  //-         height: 600,
+  //-         chrome: "nofooter",
+  //-         linkColor: "#2B7BB9",
+  //-       }
+  //-     );
+  //-   return;
+  //- });
+  //- var slider = new Slider('#ex2', {});
 script(src="/javascripts/graph.js")

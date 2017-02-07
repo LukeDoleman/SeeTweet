@@ -1,11 +1,28 @@
-//http://bl.ocks.org/sathomas/11550728
-var checkExist = setInterval(function() {
-   if ($('#twitter-wrapper').length) {
-      console.log("Exists!");
-      clearInterval(checkExist);
-   }
-}, 100); // check every 100ms
+$(document).ready(function() {
 
+  var n = local_data.handles[0].user.substr(1);
+
+  $("#twitter-wrapper").append( '<a id="twitter-embed" ' +
+    'class="twitter-timeline" ' +
+    'data-height="600" data-dnt="true"' +
+    'data-screen-name="' + n + '" href="https://twitter.com/' + n +
+    '"> Tweets by @' + n + '</a>' );
+
+  return;
+});
+
+//     twttr.widgets.load(
+//       document.getElementById("twitter-embed")
+//     );
+
+//
+// a(id="twitter-embed" data-height="600" data-dnt="true" style="display: none") Tweets by #{name}
+
+  // x.setAttribute("data-screen-name", n);
+  // x.setAttribute("href", "https://twitter.com/" + n);
+  // x.setAttribute("style", "");
+  // console.log(x);
+// });
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -51,7 +68,6 @@ node.append("image")
   .attr("height", 32)
   .on("click", function(d) {
     $(document).ready(function() {
-      if(checkExist) {
         $("#twitter-wrapper").empty();
         twttr.widgets.createTimeline(
           {
@@ -63,10 +79,8 @@ node.append("image")
             height: 600,
             chrome: "nofooter",
             linkColor: "#2B7BB9",
-            //borderColor: "#333"
           }
         );
-      }
       return;
     });
   });
@@ -81,23 +95,23 @@ node.append("image")
   simulation.force("link")
       .links(jpeople.links);
 
-  $(document).ready(function() {
-    if(checkExist) {
-      twttr.widgets.createTimeline(
-        {
-          sourceType: "profile",
-          screenName: jpeople.handles[0].user.substr(1)
-        },
-        document.getElementById("twitter-wrapper"),
-        {
-          height: 600,
-          chrome: "nofooter",
-          linkColor: "#2B7BB9",
-          //borderColor: "#333"
-        }
-      );
-    }
-  });
+  // $(document).ready(function() {
+  //   if(checkExist) {
+  //     twttr.widgets.createTimeline(
+  //       {
+  //         sourceType: "profile",
+  //         screenName: jpeople.handles[0].user.substr(1)
+  //       },
+  //       document.getElementById("twitter-wrapper"),
+  //       {
+  //         height: 600,
+  //         chrome: "nofooter",
+  //         linkColor: "#2B7BB9",
+  //         //borderColor: "#333"
+  //       }
+  //     );
+  //   }
+  // });
 
   function ticked() {
       link
