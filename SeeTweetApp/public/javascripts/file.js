@@ -20,5 +20,9 @@ $(document).ready(function() {
         console.log(new_url);
         window.location.href = new_url;
     });
+    //
+    // console.log(x);
+
+
     // var slider = new Slider('#ex2', {});
 });

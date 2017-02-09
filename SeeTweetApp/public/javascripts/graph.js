@@ -89,24 +89,6 @@ simulation
 simulation.force("link")
     .links(jpeople.links);
 
-// $(document).ready(function() {
-//   if(checkExist) {
-//     twttr.widgets.createTimeline(
-//       {
-//         sourceType: "profile",
-//         screenName: jpeople.handles[0].user.substr(1)
-//       },
-//       document.getElementById("twitter-wrapper"),
-//       {
-//         height: 600,
-//         chrome: "nofooter",
-//         linkColor: "#2B7BB9",
-//         //borderColor: "#333"
-//       }
-//     );
-//   }
-// });
-
 function ticked() {
     link
         .attr("x1", function(d) {

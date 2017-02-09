@@ -10,27 +10,49 @@ var client = new Twitter({
 var jsonfile = require('jsonfile');
 var async = require('async');
 
+/*
+    Function to extract top 5 tweets of a particular metric
+    metric denotes which information should be grabbed:
+    Retweets // Likes //  Popularity (RTs + Likes)
+*/
+function getMaxMetric(tweets_list) {
+  var tweet_ids = [];
+  for (var i=0;i<3;i++) {
+    var internal_ids = [];
+    for (var x=0;x<5;x++) {
+      var max = 0;
+      for(var value in tweets_list) {
+        var val = tweets_list[value][i];
+        if (val > max && internal_ids.indexOf(val) == -1 ) {
+          max = val;
+        }
+      }
+      internal_ids.push(max);
+    }
+    tweet_ids.push(internal_ids);
+  }
+  return tweet_ids;
+}
+
 router.get('/', function(req, res, next) {
-  // var twitter_handle = req.param('username');
-  client.get('statuses/user_timeline', { screen_name: "potus", count: 320}, function(error, tweets, response) {
+  var twitter_handle = req.param('username');
+  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
     if (!error) {
       var favs=[];var text=[];var retweets=[];
       var thumbnail = tweets[0].user.profile_image_url;
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
       var followers = tweets[0].user.followers_count;
-      var max = tweets[0];
+      var tweet_ids_max = {};
       for(var i = 0; i < tweets.length;i++) {
-        text[i] = tweets[i].text;
-        favs[i] = tweets[i].favorite_count;
-        retweets[i] = tweets[i].retweet_count;
-        if (tweets[i].favorite_count > max.favorite_count) {
-          max = tweets[i];
+        if (tweets[i].text.substring(0,2) != "RT" ) {
+          var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
+          tweet_ids_max[tweets[i].id] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
         }
-        console.log(tweets[i].favorite_count);
       }
-      res.status(200).render('statistics', {title:'Your Profile',
-      tweets: text, favs: favs, retweets:retweets, test:tweets, user:user, pic:thumbnail});
+      var full_ids = getMaxMetric(tweet_ids_max);
+      console.log(full_ids);
+      res.status(200).render('statistics', {title:'Statistics', metrics:full_ids});
     } else {
       res.status(500).json({ error: error });
     }

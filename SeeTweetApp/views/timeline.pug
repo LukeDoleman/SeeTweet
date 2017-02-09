@@ -29,3 +29,31 @@ block main
         //- input(id="ex2" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]")
     div.col-lg-6
         div(id="twitter-wrapper")
+
+block scripts
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+  script(src="/javascripts/file.js")
+  script(src="https://d3js.org/d3.v4.min.js")
+  script.
+      window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+              t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+
+          t._e = [];
+          t.ready = function(f) {
+              t._e.push(f);
+          };
+      return t;
+      }(document, "script", "twitter-wjs"));
+  script(src="/javascripts/file.js")
+  script.
+      //var x = !{JSON.stringify(metrics)};
+      var local_data = !{JSON.stringify(result)};
+      console.log(local_data);
+  script(src="/javascripts/graph.js")
