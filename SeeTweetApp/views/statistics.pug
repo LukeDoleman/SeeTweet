@@ -23,9 +23,20 @@ block head
           a(href='#') Statistics
 
 block main
-  div.col-lg-12
-    p xxx
+  div.col-lg-6
+    p(style="font-size:72px") 567 Tweets Tweeted...
+    - for (var x = 1; x < 568; x++)
+      img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=x style="width:16px;height:16px;")
+
+    p(style="font-size:72px") On average 1.6 Tweets per day...
+
+  div.col-lg-6
     div(id="tweet-wrapper")
+      p(style="font-size:64px;") Top Tweets
+      div(class="btn-group" role="group" aria-label="...")
+        button(type="button" class="btn btn-default") Number of Retweets
+        button(type="button" class="btn btn-default") Number of Likes
+        button(type="button" class="btn btn-default") Popularity (RTs + Likes)
 
 block scripts
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
@@ -50,7 +61,7 @@ block scripts
       }(document, "script", "twitter-wjs"));
   script(src="/javascripts/file.js")
   script.
-      var x = !{JSON.stringify(metrics)};
-      console.log(x);
-  script(src="/javascripts/graph.js")
+      var local_metrics = !{JSON.stringify(metrics)};
+      console.log(local_metrics);
+  //- script(src="/javascripts/graph.js")
   script(src="/javascripts/stats.js")

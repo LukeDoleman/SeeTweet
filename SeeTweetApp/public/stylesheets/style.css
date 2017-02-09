@@ -55,3 +55,9 @@ line {
 image {
   cursor:pointer;
 }
+
+/*Center Embedded Tweets*/
+/*.twitter-tweet {
+  display:block;
+  margin:auto;
+}*/
