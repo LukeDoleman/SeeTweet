@@ -1,53 +1,41 @@
 doctype
 html
-  head
-    title=title
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    head
+        title=title
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
 
-  body
+    body
 
-    block head
+        block head
 
-    block main
+        block main
+
+//- include top 5 tweets
+//- average tweets per day
+
 
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
 script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
 script(src="https://d3js.org/d3.v4.min.js")
 script.
     window.twttr = (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0],
-        t = window.twttr || {};
-      if (d.getElementById(id)) return t;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://platform.twitter.com/widgets.js";
-      fjs.parentNode.insertBefore(js, fjs);
+        var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
 
-      t._e = [];
-      t.ready = function(f) {
-        t._e.push(f);
-      };
+        t._e = [];
+        t.ready = function(f) {
+            t._e.push(f);
+        };
     return t;
     }(document, "script", "twitter-wjs"));
 script(src="/javascripts/file.js")
 script.
-  var local_data =!{JSON.stringify(result)};
-  //- $(document).ready(function() {
-  //-     $("#twitter-wrapper").empty();
-  //-     twttr.widgets.createTimeline(
-  //-       {
-  //-         sourceType: "profile",
-  //-         screenName: "potus"
-  //-       },
-  //-       document.getElementById("twitter-wrapper"),
-  //-       {
-  //-         height: 600,
-  //-         chrome: "nofooter",
-  //-         linkColor: "#2B7BB9",
-  //-       }
-  //-     );
-  //-   return;
-  //- });
-  //- var slider = new Slider('#ex2', {});
+    var local_data =!{JSON.stringify(result)};
+    //- var slider = new Slider('#ex2', {});
 script(src="/javascripts/graph.js")

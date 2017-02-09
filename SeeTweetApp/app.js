@@ -11,7 +11,6 @@ var profile = require('./routes/profile');
 var statistics = require('./routes/statistics');
 var users = require('./routes/users');
 
-
 var app = express();
 
 // view engine setup

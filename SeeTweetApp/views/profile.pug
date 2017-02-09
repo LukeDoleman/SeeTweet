@@ -1,35 +1,35 @@
 extends layout
 
 block head
-  nav.navbar.navbar-default(role='navigation')
-    // Brand and toggle get grouped for better mobile display
-    .navbar-header
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse-1')
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-    .navbar-center.navbar-brand(href='#')
-      a.navbar-brand(style="float:none;" href="#") SeeTweet
-    // Collect the nav links, forms, and other content for toggling
-    #navbar-collapse-1.collapse.navbar-collapse
-      ul.nav.navbar-nav.navbar-left
-        li
-          a(href='#')
-            span.glyphicon.glyphicon-home
-        li
-          a(href='profile') Your Profile
-        li
-          a(href='#') Statistics
+    nav.navbar.navbar-default(role='navigation')
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse-1')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+        .navbar-center.navbar-brand(href='#')
+            a.navbar-brand(style="float:none;" href="#") SeeTweet
+        // Collect the nav links, forms, and other content for toggling
+        #navbar-collapse-1.collapse.navbar-collapse
+            ul.nav.navbar-nav.navbar-left
+                li
+                    a(href='#')
+                        span.glyphicon.glyphicon-home
+                li
+                    a(href='profile') Your Profile
+                li
+                    a(href='#') Statistics
 
 block main
-  div.col-lg-12(class="vcenter")
-    div.panel.panel-default
-      div.panel-heading
-        h3.panel-title
-          img(src=pic)
-          span  #{user} #{followers} <br><br> #{description} <br> #{mentions}
-      -for(var i = 0; i < 320; ++i){
-        div.panel-body
-          span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
-      -}
+    div.col-lg-12(class="vcenter")
+        div.panel.panel-default
+            div.panel-heading
+                h3.panel-title
+                    img(src=pic)
+                    span  #{user} #{followers} <br><br> #{description} <br> #{mentions}
+            -for(var i = 0; i < 320; ++i){
+                div.panel-body
+                    span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
+            -}

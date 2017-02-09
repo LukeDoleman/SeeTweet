@@ -1,44 +1,31 @@
 extends layout
 
 block head
-  nav.navbar.navbar-default(role='navigation')
-    //- Brand and toggle get grouped for better mobile display
-    .navbar-header
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse-1')
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-    .navbar-center.navbar-brand(href='#')
-      a.navbar-brand(style="float:none;" href="#") SeeTweet
-    //- Collect the nav links, forms, and other content for toggling
-    #navbar-collapse-1.collapse.navbar-collapse
-      ul.nav.navbar-nav.navbar-left
-        li
-          a(href='#')
-            span.glyphicon.glyphicon-home
-        li
-          a(id='getProfile' href='javascript:void();') Your Profile
-        li
-          a(id='getStatistics' href='javascript:void();') Statistics
+    nav.navbar.navbar-default(role='navigation')
+        //- Brand and toggle get grouped for better mobile display
+        .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse-1')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+        .navbar-center.navbar-brand(href='#')
+            a.navbar-brand(style="float:none;" href="#") SeeTweet
+        //- Collect the nav links, forms, and other content for toggling
+        #navbar-collapse-1.collapse.navbar-collapse
+            ul.nav.navbar-nav.navbar-left
+                li
+                    a(href='#')
+                        span.glyphicon.glyphicon-home
+                li
+                    a(id='getProfile' href='javascript:void();') Your Profile
+                li
+                    a(id='getStatistics' href='javascript:void();') Statistics
 
 block main
-  div.col-lg-6
-    svg(style="display:block;margin:auto;" width="600" height="500")
-    //- - var slider = new Slider('#ex2', {});
-    //- input(id="ex2" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]")
-  div.col-lg-6
-    div(id="twitter-wrapper" onload="initialLoad()")
-      //- a(id="twitter-embed" data-height="600" data-dnt="true" style="display: none") Tweets by #{name}
-      //- class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/potus" data-screen-name=getName()) Tweets by #{name}
-//- <a class="twitter-timeline" data-height="250" data-dnt="true" data-theme="light" data-link-color="#2B7BB9" href="https://twitter.com/nodejs">Tweets by nodejs</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  //- div.col-lg-12(class="vcenter")
-  //-   div.panel.panel-default
-  //-     div.panel-heading
-  //-       h3.panel-title
-  //-         img(src=pic)
-  //-         span  #{user} | Followers: #{followers}<br><br> #{description} <br> #{mentions}
-  //-     -for(var i = 0; i < 320; ++i){
-  //-       div.panel-body
-  //-         span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
-  //-     -}
+    div.col-lg-6
+        svg(style="display:block;margin:auto;" width="600" height="500")
+        //- - var slider = new Slider('#ex2', {});
+        //- input(id="ex2" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]")
+    div.col-lg-6
+        div(id="twitter-wrapper")
