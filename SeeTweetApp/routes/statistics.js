@@ -38,6 +38,17 @@ function getMaxMetric(tweets_list) {
   return tweet_ids;
 }
 
+function extractDate(date) {
+  var text_month = date.substring(4,7);
+  var day = date.substring(8,10);
+  var year = date.substring(26,30);
+  var month = "JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(text_month) / 3 + 1;
+
+  console.log(day + " " + month + " " + year);
+
+  return;
+}
+
 router.get('/', function(req, res, next) {
   var twitter_handle = req.param('username');
   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
@@ -47,8 +58,11 @@ router.get('/', function(req, res, next) {
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
       var followers = tweets[0].user.followers_count;
+      var statuses = tweets[0].user.statuses_count;
+      var created = tweets[0].created_at;
+      created = extractDate(created);
       var tweet_ids_max = {};
-      console.log(tweets);
+      //console.log(tweets);
       for(var i = 0; i < tweets.length;i++) {
         if (tweets[i].text.substring(0,2) != "RT" ) {
           var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
@@ -58,7 +72,9 @@ router.get('/', function(req, res, next) {
       console.log(tweet_ids_max);
       var full_ids = getMaxMetric(tweet_ids_max);
       console.log(full_ids);
-      res.status(200).render('statistics', {title:'Statistics', metrics:full_ids});
+      res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
+                                            followers:followers, statuses:statuses,
+                                            created:created});
     } else {
       res.status(500).json({ error: error });
     }
