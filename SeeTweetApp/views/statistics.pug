@@ -1,6 +1,7 @@
 extends layout
 
 block head
+
   nav.navbar.navbar-default(role='navigation')
     // Brand and toggle get grouped for better mobile display
     .navbar-header
@@ -29,6 +30,8 @@ block main
       img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=x style="width:16px;height:16px;")
 
     p(style="font-size:72px") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
+
+    canvas(id="myChart" width="400" height="400")
 
   div.col-lg-6
     div(id="tweet-wrapper")
