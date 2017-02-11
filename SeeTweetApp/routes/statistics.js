@@ -38,17 +38,42 @@ function getMaxMetric(tweets_list) {
   return tweet_ids;
 }
 
-function extractDate(date) {
+function getDaysSinceFirstTweet(date) {
   var text_month = date.substring(4,7);
   var day = date.substring(8,10);
   var year = date.substring(26,30);
   var month = "JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(text_month) / 3 + 1;
 
-  console.log(day + " " + month + " " + year);
+  if(day<10) {
+      day='0'+day;
+  }
+  if(month<10) {
+      month='0'+month;
+  }
 
-  return;
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10) {
+      dd='0'+dd;
+  }
+  if(mm<10) {
+      mm='0'+mm;
+  }
+
+  var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+  var firstDate = new Date(yyyy,mm,dd);
+  var secondDate = new Date(year,month,day);
+  var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+  return diffDays;
 }
 
+//http://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+// function getCurrentDate() {
+//
+//   console.log(today);
+// }
 router.get('/', function(req, res, next) {
   var twitter_handle = req.param('username');
   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
@@ -59,22 +84,21 @@ router.get('/', function(req, res, next) {
       var description = tweets[0].user.description;
       var followers = tweets[0].user.followers_count;
       var statuses = tweets[0].user.statuses_count;
-      var created = tweets[0].created_at;
-      created = extractDate(created);
+      var created = tweets[tweets.length-1].user.created_at;
+      var daysSinceCreation = getDaysSinceFirstTweet(created);
       var tweet_ids_max = {};
-      //console.log(tweets);
       for(var i = 0; i < tweets.length;i++) {
         if (tweets[i].text.substring(0,2) != "RT" ) {
           var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
           tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
         }
       }
-      console.log(tweet_ids_max);
       var full_ids = getMaxMetric(tweet_ids_max);
-      console.log(full_ids);
+      var avg_creation = (statuses/daysSinceCreation).toFixed(2);
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
                                             followers:followers, statuses:statuses,
-                                            created:created});
+                                            daysSinceCreation:daysSinceCreation,
+                                            avg_creation:avg_creation});
     } else {
       res.status(500).json({ error: error });
     }

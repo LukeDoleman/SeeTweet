@@ -24,11 +24,11 @@ block head
 
 block main
   div.col-lg-6
-    p(style="font-size:72px") #{statuses} Tweets Tweeted...
+    p(style="font-size:72px") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
     - for (var x = 1; x <= statuses; x++)
       img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=x style="width:16px;height:16px;")
 
-    p(style="font-size:72px") On average #{created} Tweets per day...
+    p(style="font-size:72px") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
 
   div.col-lg-6
     div(id="tweet-wrapper")
