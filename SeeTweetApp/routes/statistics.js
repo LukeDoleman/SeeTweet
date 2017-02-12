@@ -20,7 +20,7 @@ function getMaxMetric(tweets_list) {
   for (var i=0;i<3;i++) {
     var max_val = [];
     var internal_ids = [];
-    for (var x=0;x<5;x++) {
+    for (var x=0;x<3;x++) {
       var max = 0;
       var max_id;
       for(var value in tweets_list) {
@@ -69,16 +69,38 @@ function getDaysSinceFirstTweet(date) {
   return diffDays;
 }
 
+function getTweetTime(tweet_time) {
+  var hour = tweet_time.substring(11,13);
+  var time;
+  switch (hour) {
+      case "07": case "08": case "09": case "10": case "11": case "12":
+          time = "Morning";
+          break;
+      case "13": case "14": case "15": case "16": case "17": case "18":
+          time = "Afternoon";
+          break;
+      case "19": case "20": case "21": case "22": case "23": case "00":
+          time = "Evening";
+          break;
+      case "01": case "02": case "03": case "04": case "05": case "06":
+          time = "Early Hours";
+          break;
+  }
+  return time;
+}
+
 //http://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
 // function getCurrentDate() {
 //
 //   console.log(today);
 // }
+
+//http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
 router.get('/', function(req, res, next) {
   var twitter_handle = req.param('username');
   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 3200}, function(error, tweets, response) {
     if (!error) {
-      var favs=[];var texts=[];var retweets=[];
+      var favs=[]; var texts=[]; var retweets=[];
       var thumbnail = tweets[0].user.profile_image_url;
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
@@ -87,10 +109,21 @@ router.get('/', function(req, res, next) {
       var created = tweets[tweets.length-1].user.created_at;
       var daysSinceCreation = getDaysSinceFirstTweet(created);
       var tweet_ids_max = {};
-      console.log(tweets.length);
+      var tweet_times = [0,0,0,0];
       for(var i = 0; i < tweets.length;i++) {
         //Add text for Tweet hover display
         texts.push(tweets[i].text);
+        //Get the time tweet was created
+        var time = getTweetTime(tweets[i].created_at);
+        if (time === "Morning") {
+          tweet_times[0]++;
+        } else if (time == "Afternoon"){
+          tweet_times[1]++;
+        } else if (time == "Evening"){
+          tweet_times[2]++;
+        } else if (time == "Early Hours"){
+          tweet_times[3]++;
+        }
         if (tweets[i].text.substring(0,2) != "RT" ) {
           var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
           tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
@@ -98,22 +131,15 @@ router.get('/', function(req, res, next) {
       }
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
-      var test = ["a","a","a","a","a","a"];
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
                                             followers:followers, statuses:statuses,
                                             daysSinceCreation:daysSinceCreation,
-                                            avg_creation:avg_creation, texts:texts});
+                                            avg_creation:avg_creation, texts:texts,
+                                            tweet_times:tweet_times});
     } else {
       res.status(500).json({ error: error });
     }
   });
 });
-
-// router.get('/', function(req, res){
-//
-//   res.render('index', {
-//     title: 'Home'
-//   });
-// });
 
 module.exports = router;
