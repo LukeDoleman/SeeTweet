@@ -76,9 +76,9 @@ function getDaysSinceFirstTweet(date) {
 // }
 router.get('/', function(req, res, next) {
   var twitter_handle = req.param('username');
-  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 320}, function(error, tweets, response) {
+  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 3200}, function(error, tweets, response) {
     if (!error) {
-      var favs=[];var text=[];var retweets=[];
+      var favs=[];var texts=[];var retweets=[];
       var thumbnail = tweets[0].user.profile_image_url;
       var user = tweets[0].user.name;
       var description = tweets[0].user.description;
@@ -87,7 +87,10 @@ router.get('/', function(req, res, next) {
       var created = tweets[tweets.length-1].user.created_at;
       var daysSinceCreation = getDaysSinceFirstTweet(created);
       var tweet_ids_max = {};
+      console.log(tweets.length);
       for(var i = 0; i < tweets.length;i++) {
+        //Add text for Tweet hover display
+        texts.push(tweets[i].text);
         if (tweets[i].text.substring(0,2) != "RT" ) {
           var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
           tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
@@ -95,10 +98,11 @@ router.get('/', function(req, res, next) {
       }
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
+      var test = ["a","a","a","a","a","a"];
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
                                             followers:followers, statuses:statuses,
                                             daysSinceCreation:daysSinceCreation,
-                                            avg_creation:avg_creation});
+                                            avg_creation:avg_creation, texts:texts});
     } else {
       res.status(500).json({ error: error });
     }

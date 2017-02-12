@@ -24,16 +24,23 @@ block head
           a(href='#') Statistics
 
 block main
-  div.col-lg-6
+  div.col-lg-8
     p(style="font-size:72px") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
-    - for (var x = 1; x <= statuses; x++)
+    each val in texts
+      img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=val style="width:16px;height:16px;")
+      //- span val
+    //- - for (var x = 1; x <= statuses; x++)
       img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=x style="width:16px;height:16px;")
+    //- - each t in test
+    //-     p t
 
+  div.col-lg-4
+    canvas(id="myChart" width="300" height="300")
+
+  div.col-lg-12
     p(style="font-size:72px") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
 
-    canvas(id="myChart" width="400" height="400")
-
-  div.col-lg-6
+  div.col-lg-12
     div(id="tweet-wrapper")
       p(style="font-size:64px;") Top Tweets
       div(class="btn-group" role="group" aria-label="...")
