@@ -37,11 +37,15 @@ block main
     div.col-lg-12
       p(style="font-size:72px") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
     div.col-lg-12
-      p bar chart x
+      div.col-lg-6
+        canvas(id="myBarChart" width="300" height="300")
+      div.col-lg-6
+        p xox
+        
 
   div.row.fourth
     div.col-lg-6
-      p xoxo
+      p xox
     div.col-lg-6
       div(id="tweet-wrapper")
         p(style="font-size:64px;") Top Tweets

@@ -110,6 +110,7 @@ router.get('/', function(req, res, next) {
       var daysSinceCreation = getDaysSinceFirstTweet(created);
       var tweet_ids_max = {};
       var tweet_times = [0,0,0,0];
+      var tweet_days = [0,0,0,0,0,0,0];
       for(var i = 0; i < tweets.length;i++) {
         //Add text for Tweet hover display
         texts.push(tweets[i].text);
@@ -124,18 +125,37 @@ router.get('/', function(req, res, next) {
         } else if (time == "Early Hours"){
           tweet_times[3]++;
         }
+        //Get day tweet was created
+        var day = tweets[i].created_at.substring(0,3);
+        if (day === "Mon") {
+          tweet_days[0]++;
+        } else if (day === "Tue") {
+          tweet_days[1]++;
+        } else if (day === "Wed") {
+          tweet_days[2]++;
+        }else if (day === "Thu") {
+          tweet_days[3]++;
+        }else if (day === "Fri") {
+          tweet_days[4]++;
+        }else if (day === "Sat") {
+          tweet_days[5]++;
+        }else if (day === "Sun") {
+          tweet_days[6]++;
+        }
+
         if (tweets[i].text.substring(0,2) != "RT" ) {
           var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
           tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
         }
       }
+      console.log(tweet_days);
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
                                             followers:followers, statuses:statuses,
                                             daysSinceCreation:daysSinceCreation,
                                             avg_creation:avg_creation, texts:texts,
-                                            tweet_times:tweet_times});
+                                            tweet_times:tweet_times, tweet_days:tweet_days});
     } else {
       res.status(500).json({ error: error });
     }
