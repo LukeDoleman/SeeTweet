@@ -57,12 +57,18 @@ block main
     div.col-lg-6
       p xox
     div.col-lg-6
-      div(id="tweet-wrapper")
+      div.top-tweets(style="text-align:center;")
         p(style="font-size:64px;") Top Tweets
-        div(class="btn-group" role="group" aria-label="...")
-          button(type="button" class="btn btn-default") Number of Retweets
-          button(type="button" class="btn btn-default") Number of Likes
-          button(type="button" class="btn btn-default") Popularity (RTs + Likes)
+        div.radio-select
+          form
+            label.radio-inline
+              input(id="r1" type='radio', name='1', checked="checked")
+              | Number of Retweets
+            label.radio-inline
+              input(id="r2" type='radio', name='2')
+              | Number of Likes
+          div.twitter-tweet(id="tweet-wrapper")
+        //- div.test
 
 block scripts
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")

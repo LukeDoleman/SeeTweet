@@ -17,7 +17,7 @@ var async = require('async');
 */
 function getMaxMetric(tweets_list) {
   var tweet_ids = [];
-  for (var i=0;i<3;i++) {
+  for (var i=0;i<2;i++) {
     var max_val = [];
     var internal_ids = [];
     for (var x=0;x<3;x++) {
@@ -141,8 +141,7 @@ router.get('/', function(req, res, next) {
         }
 
         if (tweets[i].text.substring(0,2) != "RT" ) {
-          var popularity = tweets[i].retweet_count + tweets[i].favorite_count;
-          tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count, popularity];
+          tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count];
         }
       }
       console.log(tweet_days);

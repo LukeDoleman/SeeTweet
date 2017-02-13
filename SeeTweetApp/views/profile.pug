@@ -25,13 +25,13 @@ block head
                     a(href='#') Statistics
 
 block main
-    div.col-lg-12(class="vcenter")
+    div.col-lg-6(class="vcenter")
         div.panel.panel-default
             div.panel-heading
                 h3.panel-title
                     img(src=pic)
                     span  #{user} #{followers} <br><br> #{description} <br> #{mentions}
-            -for(var i = 0; i < 320; ++i){
+            -for(var i = 0; i < tweets.length; ++i){
                 div.panel-body
                     span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
             -}

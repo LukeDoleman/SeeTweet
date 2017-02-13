@@ -63,7 +63,12 @@ image {
 }
 
 /*Center Embedded Tweets*/
-/*.twitter-tweet {
-  display:block;
-  margin:auto;
-}*/
+.twitter-tweet {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+input[type=radio] {
+  display: inline;
+}

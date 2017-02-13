@@ -8,6 +8,36 @@ $(window).on( "load", function() {
         }
     );
   }
+
+  $("input[name='2']").change(function() {
+    $("#r1").prop('checked', false);
+    console.log("zozozo");
+    $("#tweet-wrapper").empty();
+    for (var i=0;i<local_metrics[1].length;i++) {
+      twttr.widgets.createTweet(
+          local_metrics[1][i],
+          document.getElementById("tweet-wrapper"), {
+              theme: 'light',
+          }
+      );
+    }
+  });
+
+  $("input[name='1']").change(function() {
+    console.log("XXXX");
+    $("#r2").prop('checked', false);
+    $("#tweet-wrapper").empty();
+    for (var i=0;i<local_metrics[0].length;i++) {
+      twttr.widgets.createTweet(
+          local_metrics[0][i],
+          document.getElementById("tweet-wrapper"), {
+              theme: 'light',
+          }
+      );
+    }
+  });
+
+
 });
 
 var ctx = document.getElementById("myChart");
