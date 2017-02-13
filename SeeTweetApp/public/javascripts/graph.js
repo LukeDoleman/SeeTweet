@@ -34,7 +34,8 @@ console.log(jpeople.handles[0]);
 var link = svg.selectAll(".link")
     .data(jpeople.links)
     .enter().append("line")
-    .attr("class", "links");
+    .attr("class", "links")
+    .attr("stroke-width", 5);
 // .attr("stroke-width", function(d) {
 //   if (d) {
 //     return d.weight;
@@ -80,6 +81,11 @@ node.append("image")
 node.append("title")
     .text(function(d) {
         return d.user;
+    });
+
+link.append("title")
+    .text(function(d) {
+        return d.weight;
     });
 
 simulation
