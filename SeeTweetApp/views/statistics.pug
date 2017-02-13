@@ -1,5 +1,11 @@
 extends layout
 
+block head_scripts
+  script(src="/javascripts/Chart.bundle.min.js")
+  script.
+    var tweet_times = !{JSON.stringify(tweet_times)}
+    var tweet_days = !{JSON.stringify(tweet_days)}
+
 block head
 
   nav.navbar.navbar-default(role='navigation')
@@ -24,9 +30,13 @@ block head
           a(href='#') Statistics
 
 block main
+
+  //- - var tweet_times = JSON.stringify(!{tweet_times})
+    //- var tweet_days = !{JSON.stringify(tweet_days)}
+
   div.row.first(style="padding-bottom:70px;")
     div.col-lg-8
-      p(style="font-size:72px") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
+      p(style="font-size:72px;text-align:center;") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
       each val in texts
         img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=val style="width:16px;height:16px;")
     div.col-lg-4
@@ -35,13 +45,13 @@ block main
 
   div.row.second
     div.col-lg-12
-      p(style="font-size:72px") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
+      p(style="font-size:72px;text-align:center;") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
     div.col-lg-12
       div.col-lg-6
         canvas(id="myBarChart" width="300" height="300")
       div.col-lg-6
         p xox
-        
+
 
   div.row.fourth
     div.col-lg-6

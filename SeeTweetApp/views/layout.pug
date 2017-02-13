@@ -4,10 +4,8 @@ html
         title=title
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
         link(rel='stylesheet', href='/stylesheets/style.css')
-        script(src="/javascripts/Chart.bundle.min.js")
-        script.
-          var tweet_times = !{JSON.stringify(tweet_times)}
-          var tweet_days = !{JSON.stringify(tweet_days)}
+
+        block head_scripts
 
     body
 

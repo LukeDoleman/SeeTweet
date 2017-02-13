@@ -100,10 +100,7 @@ router.get('/', function(req, res, next) {
   var twitter_handle = req.param('username');
   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 3200}, function(error, tweets, response) {
     if (!error) {
-      var favs=[]; var texts=[]; var retweets=[];
-      var thumbnail = tweets[0].user.profile_image_url;
-      var user = tweets[0].user.name;
-      var description = tweets[0].user.description;
+      var texts=[];
       var followers = tweets[0].user.followers_count;
       var statuses = tweets[0].user.statuses_count;
       var created = tweets[tweets.length-1].user.created_at;

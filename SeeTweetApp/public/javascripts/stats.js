@@ -31,7 +31,7 @@ var myChart = new Chart(ctx, {
                     "#24ff00"
 
                 ],
-                borderColor: "#333",
+                borderColor: "transparent",
                 hoverBackgroundColor: [
                     "#FF6384",
                     "#36A2EB",
