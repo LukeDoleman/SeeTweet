@@ -13,27 +13,54 @@ var async = require('async');
 // http://www.sebastianseilund.com/nodejs-async-in-practice
 
 router.get('/', function(req, res) {
+
     var twitter_handle = req.param('username');
 
     async.waterfall([
-
-        //Perform crawl on user given twitter handle
         function(callback) {
-            client.get('statuses/user_timeline', {
-                screen_name: twitter_handle,
-                count: 320
-            }, function(error, tweets, response) {
-                if (!error) {
-                    console.log("First Tweets Crawled Successfully!");
-                } else {
-                    console.log(error);
-                }
-                callback(null, tweets);
-            });
+            var x = 0;
+            var iterations = 5;
+            var max;
+            var list_tweets = [];
+            
+            async.whilst(function() {
+                    return x <= iterations;
+                },
+
+                function(next) {
+                    client.get('statuses/user_timeline', {
+                        screen_name: twitter_handle,
+                        count: 200,
+                        max_id: max
+                    }, function(error, tweets, response) {
+                        if (!error) {
+                            console.log("First Tweets Crawled Successfully!");
+                            console.log("Max is: " + max);
+                            for (var i = 0; i < tweets.length; i++) {
+                                console.log(tweets[i].id);
+                                list_tweets.push(tweets[i]);
+                            }
+                        } else {
+                            console.log(error);
+                        }
+                        max = list_tweets[list_tweets.length - 1].id;
+                        x++;
+                        next();
+                    });
+                },
+
+                function(err) {
+                    callback(null, list_tweets);
+                    // console.log(err);
+                });
         },
 
         //Extract appropriate list of user mentions from first crawl
-        function(tweets, callback) {
+        function(list_tweets, callback) {
+            console.log("This is sparta x");
+            tweets = list_tweets;
+            console.log("SECOND");
+            console.log(tweets.length);
             var mentions = {};
             mentions.handles = [{
                 "user": ("@" + twitter_handle),
@@ -215,8 +242,8 @@ router.get('/', function(req, res) {
 
         //Grab profile images for each user
         function(full_mentions, callback) {
-            var len = full_mentions.handles.length;
-            var x = 1;
+            var len = full_mentions.handles.length - 1;
+            var x = 0;
             async.forEach(full_mentions.handles, function(mention, next) {
                 client.get('users/show', {
                     screen_name: mention.user
@@ -226,7 +253,7 @@ router.get('/', function(req, res) {
                     } else {
                         console.log(error);
                     }
-                    if (x == len) {
+                    if (x === len) {
                         callback(null, full_mentions);
                     } else {
                         x++;
@@ -237,9 +264,9 @@ router.get('/', function(req, res) {
                 if (err) return callback(err);
             });
         },
+
     ], function(err, result) {
-        console.log(result);
-        //result.handles = result.handles.filter(function(n){ return n !== undefined; });
+        //Remove any broken Links from data
         result.links = result.links.filter(function(n) {
             return n !== undefined;
         });
@@ -252,3 +279,74 @@ router.get('/', function(req, res) {
 });
 
 module.exports = router;
+
+//
+// function(callback) {
+//     var max = 830141366059536400;
+//     var x = 1;
+//     var test = [0,0,0,0,0];
+//     var list_tweets = [];
+//     async.forEach(test, function(t, next) {
+//         client.get('statuses/user_timeline', {
+//           screen_name: twitter_handle,
+//           count: 200,
+//           max_id: max
+//         }, function(error, tweets, response) {
+//             if (!error) {
+//                 console.log("First Tweets Crawled Successfully!");
+//                 console.log("Max is: " + max);
+//                 for (var i=0; i < tweets.length; i++) {
+//                   console.log(tweets[i].id);
+//                   list_tweets.push(tweets[i]);
+//                   // console.log(tweets[i].id);
+//                   // console.log(tweets[i].text);
+//                 }
+//             } else {
+//                 console.log(error);
+//             }
+//             if (x == 5) {
+//                 //console.log(list_tweets);
+//                 callback(null, list_tweets);
+//             } else {
+//                 max = list_tweets[list_tweets.length-1].id;
+//                 max_id = max;
+//                 x++;
+//                 next();
+//             }
+//         });
+//     }, function(err) {
+//         if (err) return callback(err);
+//     });
+// },
+
+//Perform crawl on user given twitter handle
+// function(callback) {
+//     var max = 830141366059536400;
+//     for(var x=0;x<5;x++) {
+//       var list_tweets = [];
+//       client.get('statuses/user_timeline', {
+//           screen_name: twitter_handle,
+//           count: 200,
+//           max_id: max
+//       }, function(error, tweets, response) {
+//           if (!error) {
+//               console.log("First Tweets Crawled Successfully!");
+//               for (var i=0; i < tweets.length; i++) {
+//                 list_tweets.push(tweets[i]);
+//                 // console.log(tweets[i].id);
+//                 // console.log(tweets[i].text);
+//                 max = tweets[i].id;
+//               }
+//           } else {
+//               console.log(error);
+//           }
+//           if (x === 5) {
+//               callback(null, tweets);
+//           } else {
+//               console.log(list_tweets.length);
+//               x++;
+//               // next();
+//           }
+//         });
+//       }
+//     },
