@@ -1,8 +1,8 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: #c0c0aa; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #c0c0aa , #1ce); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #c0c0aa , #1ce); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #70e1f5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #70e1f5 , #ffd194); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #70e1f5 , #ffd194); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .navbar-default .navbar-brand:hover {
