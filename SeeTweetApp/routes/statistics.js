@@ -98,23 +98,6 @@ function getTweetTime(tweet_time) {
 //   console.log(today);
 // }
 
-var findDocuments = function(db, callback) {
-  MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
-    test.equal(null, err);
-    console.log("Connected correctly to server");
-    // Get the documents collection
-    var collection = db.collection('tweets_db');
-    // Find some documents
-    collection.find({}).toArray(function(err, docs) {
-      test.equal(err, null);
-      //test.equal(2, docs.length);
-      console.log("Found the following records");
-      // console.dir(docs);
-      callback(docs);
-    });
-  });
-};
-
 //http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
 router.get('/', function(req, res, next) {
     var twitter_handle = req.param('username');
@@ -138,20 +121,8 @@ router.get('/', function(req, res, next) {
         }
 
     ], function(err, docs) {
-      console.log(docs[0]);
+      console.log(docs.length);
     });
-
-  //   var x;
-  //
-  //
-  //
-  //   x = findDocuments(db, function() {
-  //     db.close();
-  //   });
-  //
-  //   console.log(x + "xxx");
-  //
-  // });
 
 
   client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 3200}, function(error, tweets, response) {
