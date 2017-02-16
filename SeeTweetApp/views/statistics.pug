@@ -37,8 +37,9 @@ block main
   div.row.first(style="padding-bottom:70px;")
     div.col-lg-8
       p(style="font-size:72px;text-align:center;") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
-      each val in texts
-        img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=val style="width:16px;height:16px;")
+      div(id="little-birds")
+        each val in texts
+          img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=val style="width:24px;height:24px;")
     div.col-lg-4
       p(style="font-size:72px") Tweeting Times...
       canvas(id="myChart" width="300" height="300")

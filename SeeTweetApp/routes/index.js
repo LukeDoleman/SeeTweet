@@ -6,17 +6,19 @@ var test = require('assert');
 
 router.get('/', function(req, res){
 
+  //Remove all leftover documents from the collection
   MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
     var collection = db.collection('tweets_db');
-    // Insert a single document
-    collection.remove();
-
-    // Wait for a second before finishing up, to ensure we have written the item to disk
-    setTimeout(function() {
-        test.equal(null, err);
-        console.log("Document sucessfully removed from the collection");
-        db.close();
-    }, 100);
+    //http://stackoverflow.com/questions/25372297/mongodb-how-can-i-get-the-size-of-a-collection-using-node-js
+    collection.count({}, function(error, numOfDocs) {
+        console.log('I have '+numOfDocs+' documents in my collection.');
+        if (numOfDocs !== 0) {
+          collection.remove();
+          console.log("Collection has been emptied");
+        } else {
+          console.log("Collection is empty.");
+        }
+    });
   });
 
   res.render('index', {

@@ -26,19 +26,6 @@ var insertDocuments = function(data, db, callback) {
   });
 };
 
-var findDocuments = function(db, callback) {
-  // Get the documents collection
-  var collection = db.collection('tweets_db');
-  // Find some documents
-  var x = collection.find({}).toArray(function(err, docs) {
-    test.equal(err, null);
-    //test.equal(2, docs.length);
-    console.log("Found the following records");
-    console.dir(docs);
-    callback(docs);
-  });
-};
-
 router.get('/', function(req, res) {
 
     var twitter_handle = req.param('username');
@@ -46,7 +33,7 @@ router.get('/', function(req, res) {
     async.waterfall([
         function(callback) {
             var x = 0;
-            var iterations = 10;
+            var iterations = 15;
             var max;
             var list_tweets = [];
 

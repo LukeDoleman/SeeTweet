@@ -113,8 +113,6 @@ router.get('/', function(req, res, next) {
                 collection.find({}).toArray(function(err, docs) {
                     test.equal(err, null);
                     //test.equal(2, docs.length);
-                    console.log("Found the following records");
-                    // console.dir(docs);
                     callback(null, docs);
                 });
             });
@@ -122,11 +120,7 @@ router.get('/', function(req, res, next) {
 
     ], function(err, docs) {
       console.log(docs.length);
-    });
-
-
-  client.get('statuses/user_timeline', { screen_name: twitter_handle, count: 3200}, function(error, tweets, response) {
-    if (!error) {
+      tweets = docs;
       var texts=[];
       var followers = tweets[0].user.followers_count;
       var statuses = tweets[0].user.statuses_count;
@@ -179,9 +173,6 @@ router.get('/', function(req, res, next) {
                                             daysSinceCreation:daysSinceCreation,
                                             avg_creation:avg_creation, texts:texts,
                                             tweet_times:tweet_times, tweet_days:tweet_days});
-    } else {
-      res.status(500).json({ error: error });
-    }
   });
 });
 
