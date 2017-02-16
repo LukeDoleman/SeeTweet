@@ -67,12 +67,4 @@ app.use(function(err, req, res, next) {
   });
 });
 
-//Connects to the server and the database "tweetdb"
-// var url = 'mongodb://localhost:27017/tweetdb';
-// MongoClient.connect(url, function(err, db) {
-//   assert.equal(null, err);
-//   console.log("Connected correctly to server.");
-//   db.close();
-// });
-
 module.exports = app;

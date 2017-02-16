@@ -10,7 +10,34 @@ var client = new Twitter({
 var jsonfile = require('jsonfile');
 var async = require('async');
 
+var MongoClient = require('mongodb').MongoClient;
+var test = require('assert');
+
 // http://www.sebastianseilund.com/nodejs-async-in-practice
+
+var insertDocuments = function(data, db, callback) {
+  // Get the documents collection
+  var collection = db.collection('tweets_db');
+  // Insert some documents
+  collection.insertMany(data, function(err, result) {
+    test.equal(err, null);
+    console.log("Inserted documents into the document collection");
+    callback(result);
+  });
+};
+
+var findDocuments = function(db, callback) {
+  // Get the documents collection
+  var collection = db.collection('tweets_db');
+  // Find some documents
+  var x = collection.find({}).toArray(function(err, docs) {
+    test.equal(err, null);
+    //test.equal(2, docs.length);
+    console.log("Found the following records");
+    console.dir(docs);
+    callback(docs);
+  });
+};
 
 router.get('/', function(req, res) {
 
@@ -52,6 +79,18 @@ router.get('/', function(req, res) {
                     callback(null, list_tweets);
                     // console.log(err);
                 });
+        },
+
+        // Append all tweets crawled to the Database
+        function (list_tweets, callback) {
+          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+            test.equal(null, err);
+            console.log("Connected correctly to server");
+            insertDocuments(list_tweets, db, function() {
+              db.close();
+              callback(null, list_tweets);
+            });
+          });
         },
 
         //Extract appropriate list of user mentions from first crawl

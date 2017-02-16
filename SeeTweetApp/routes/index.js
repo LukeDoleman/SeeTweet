@@ -6,7 +6,6 @@ var test = require('assert');
 
 router.get('/', function(req, res){
 
-
   MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
     var collection = db.collection("simple_document_insert_collection_no_safe");
     // Insert a single document
