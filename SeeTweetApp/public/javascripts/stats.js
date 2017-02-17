@@ -89,6 +89,50 @@ var myChart = new Chart(ctx, {
     }
 });
 
+var ctx = document.getElementById("myPieChart");
+
+var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: [
+            "Desktop",
+            "Mobile",
+        ],
+        datasets: [
+            {
+                data: device,
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                ],
+                borderColor: "transparent",
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                ]
+            }]
+    },
+    options: {
+        animation:{
+            animateRotate:true
+        },
+        //http://stackoverflow.com/questions/37257034/chart-js-2-0-doughnut-tooltip-percentages
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              var dataset = data.datasets[tooltipItem.datasetIndex];
+              var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                return previousValue + currentValue;
+              });
+              var currentValue = dataset.data[tooltipItem.index];
+              var precentage = Math.floor(((currentValue/total) * 100)+0.5);
+              return precentage + "%";
+            }
+          }
+      }
+    }
+});
+
 var ctx = document.getElementById("myBarChart");
 
 var myBarChart = new Chart(ctx, {

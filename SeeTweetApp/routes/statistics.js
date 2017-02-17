@@ -129,6 +129,8 @@ router.get('/', function(req, res, next) {
       var tweet_ids_max = {};
       var tweet_times = [0,0,0,0];
       var tweet_days = [0,0,0,0,0,0,0];
+      //Desktop Client|| Mobile client
+      var device = [0,0];
       for(var i = 0; i < tweets.length;i++) {
         //Add text for Tweet hover display
         texts.push(tweets[i].text);
@@ -161,18 +163,34 @@ router.get('/', function(req, res, next) {
           tweet_days[6]++;
         }
 
-        if (tweets[i].text.substring(0,2) != "RT" ) {
-          tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count];
+        if (tweets[i].text.substring(0, 2) != "RT") {
+            tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count];
+        }
+        if (tweets[i].source.includes("Twitter for Mac") ||
+            tweets[i].source.includes("Twitter Web Client") ||
+            tweets[i].source.includes("TweetDeck") ||
+            tweets[i].source.includes("Twitter for Websites")
+        ) {
+            device[0]++;
+        } else if (tweets[i].source.includes("Twitter for iPhone") ||
+            tweets[i].source.includes("Twitter for iPad") ||
+            tweets[i].source.includes("Twitter for Android") ||
+            tweets[i].source.includes("Twitter for Android Tablets") ||
+            tweets[i].source.includes("Mobile Web")
+        ) {
+            device[1]++;
         }
       }
       console.log(tweet_days);
+      console.log(device);
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
                                             followers:followers, statuses:statuses,
                                             daysSinceCreation:daysSinceCreation,
                                             avg_creation:avg_creation, texts:texts,
-                                            tweet_times:tweet_times, tweet_days:tweet_days});
+                                            tweet_times:tweet_times, tweet_days:tweet_days,
+                                            device:device});
   });
 });
 

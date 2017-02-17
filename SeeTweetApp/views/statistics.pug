@@ -5,6 +5,8 @@ block head_scripts
   script.
     var tweet_times = !{JSON.stringify(tweet_times)}
     var tweet_days = !{JSON.stringify(tweet_days)}
+    var device = !{JSON.stringify(device)}
+
 
 block head
 
@@ -25,9 +27,9 @@ block head
           a(href='#')
             span.glyphicon.glyphicon-home
         li
-          a(href='profile') Your Profile
+          a(id='getProfile' href='javascript:void();') Your Profile
         li
-          a(href='#') Statistics
+          a(id='getStatistics' href='javascript:void();') Statistics
 
 block main
 
@@ -46,17 +48,22 @@ block main
 
   div.row.second
     div.col-lg-12
-      p(style="font-size:72px;text-align:center;") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day...
+      p(style="font-size:72px;") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day
     div.col-lg-12
       div.col-lg-6
         canvas(id="myBarChart" width="300" height="300")
       div.col-lg-6
-        p xox
-
+        p Users I Reweet the most
+        p List of commonly used hashtags <br/> <br/> <br/>
 
   div.row.fourth
-    div.col-lg-6
-      p xox
+    div.col-lg-1
+    div.col-lg-4
+      p(style="font-size:72px;text-align:center") Device Usage
+      canvas(id="myPieChart" width="300" height="300")
+      p(style="font-size:72px;") With an average of <strong style="color:#111">X</strong> Likes and <strong style="color:#111">X</strong> retweets per tweet...
+
+    div.col-lg-1
     div.col-lg-6
       div.top-tweets(style="text-align:center;")
         p(style="font-size:64px;") Top Tweets

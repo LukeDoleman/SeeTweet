@@ -31,11 +31,31 @@ router.get('/', function(req, res) {
     var twitter_handle = req.param('username');
 
     async.waterfall([
+
         function(callback) {
+          client.get('users/show', {
+              screen_name: twitter_handle
+          }, function(error, info, response) {
+              if (!error) {
+                  console.log(info.statuses_count);
+                  callback(null, info.statuses_count);
+              } else {
+                  console.log(error);
+                  console.log(twitter_handle + "- can't be found!!!");
+              }
+          });
+        },
+
+
+
+        function(number, callback) {
             var x = 0;
-            var iterations = 15;
+            if (number > 3200) number = 3200;
+            var iterations = Math.ceil((number / 200));
             var max;
             var list_tweets = [];
+
+            console.log("count is -" + number);
 
             async.whilst(function() {
                     return x <= iterations;

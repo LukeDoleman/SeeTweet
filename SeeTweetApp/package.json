@@ -16,6 +16,7 @@
     "jsonfile": "^2.4.0",
     "mongodb": "^2.2.24",
     "morgan": "~1.7.0",
+    "progressbar.js": "^1.0.1",
     "pug": "^2.0.0-beta6",
     "serve-favicon": "~2.3.0",
     "twitter": "^1.4.0",

@@ -1,10 +1,11 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: #D3959B; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #D3959B , #BFE6BA); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #D3959B , #BFE6BA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+
+  /*background: #D3959B; /* fallback for old browsers */
+  /*background: -webkit-linear-gradient(to left, #D3959B , #BFE6BA); /* Chrome 10-25, Safari 5.1-6 */
+  /*background: linear-gradient(to left, #D3959B , #BFE6BA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+
+  */
 
-
+  background-color: #FFF;
 
 
   /*background: #E0EAFC; /* fallback for old browsers */
@@ -99,37 +100,110 @@ input[type=radio] {
   overflow-y: scroll;
 }
 
+
+/* http://codepen.io/ClearDesign/pen/pJrLwm*/
 /* CSS FOR LOADING SYMBOL */
+/*
+ * Title: Pure CSS3 Menu
+ * Author: Clear
+ * Version: 1.0.0
+ * Create: 2015-06-05
+ * Update: 2015-06-15
+ * http://www.ClearDesign.me
+ */
 
+/* Clear Loading */
+.clear-loading {
+  text-align: center;
+  margin: 0 20px;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+}
 
-.container {
+/* Loading Effect Two */
+.loading-effect-2 {
+  width: 100px;
+  height: 100px;
+}
+.loading-effect-2 > span,
+.loading-effect-2 > span:before,
+.loading-effect-2 > span:after {
+  content: "";
+  display: block;
+  border-radius: 50%;
+  border: 2px solid #fff;
   position: absolute;
   top: 50%;
   left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-.dot {
-  width: 30px;
-  height: 30px;
-  border: 6px solid black;
-  border-radius: 50%;
-  float: left;
-  margin: 0 15px;
-  transform: scale(0);
-  animation: fx 1000ms ease infinite 0ms;
+.loading-effect-2 > span {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-left-color: transparent;
+  -webkit-animation: effect-2 2s infinite linear;
+  -moz-animation: effect-2 2s infinite linear;
+  -ms-animation: effect-2 2s infinite linear;
+  -o-animation: effect-2 2s infinite linear;
+  animation: effect-2 2s infinite linear;
 }
-.dot:nth-child(2) {
-  animation: fx 1000ms ease infinite 300ms;
+.loading-effect-2 > span:before {
+  width: 75%;
+  height: 75%;
+  border-right-color: transparent;
 }
-.dot:nth-child(3) {
-  animation: fx 1000ms ease infinite 600ms;
+.loading-effect-2 > span:after {
+  width: 50%;
+  height: 50%;
+  border-bottom-color: transparent;
 }
-@keyframes fx {
-  50% {
-    transform: scale(1);
-    opacity: 1;
+@-webkit-keyframes effect-2 {
+  from {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
-  100% {
-    opacity: 0;
+  to {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
+}
+@keyframes effect-2 {
+  from {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/*#container {*/
+  /*margin: 20px;
+  width: 200px;
+  height: 200px;
+  position: relative;
 }

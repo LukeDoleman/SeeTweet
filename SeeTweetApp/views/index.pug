@@ -1,6 +1,8 @@
 extends layout
 
 block head_scripts
+  link(href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css")
+  script(src="/javascripts/progressbar.min.js")
 
 block head
   nav.navbar.navbar-default(role='navigation')
@@ -14,17 +16,41 @@ block head
       a.navbar-brand(style="float:none;" href="#") SeeTweet
 
 block main
-  div.col-lg-offset-3.col-lg-6
-    div.input-group.input-group-lg
-      input(type="text" class="form-control" placeholder="@Username" id="userInput")
-      span.input-group-btn
-        a(class="btn btn-secondary" id="getTweets" type="submit") See!
+  .container
+    .row(id="searchBar")
+      .col-lg-offset-3.col-lg-6
+        .welcome(id="welcome")
+          div.input-group.input-group-lg
+            input(type="text" class="form-control" placeholder="@Username" id="userInput")
+            span.input-group-btn
+              a(class="btn btn-secondary" id="getTweets" type="submit") See!
+    .row(id="loader" style="display:none;")
+      .col-lg-offset-5.col-lg-2
+        div(id="container")
 
-  div.col-lg-12
-    div(class="container" style="text-align:center")
-      div(class="dot")
-      div(class="dot")
-      div(class="dot")
+  //-   div.col-lg-offset-3.col-lg-6
+  //-     div.input-group.input-group-lg
+  //-       input(type="text" class="form-control" placeholder="@Username" id="userInput")
+  //-       span.input-group-btn
+  //-         a(class="btn btn-secondary" id="getTweets" type="submit") See!
+  //-
+  //- div.col-lg.offset-3.col-lg-3
+  //-   div(id="container")
+
+      //- <div class="container">
+      //-     <div class="row">
+      //-         <div class="col-lg-offset-3 col-lg-6"></div>
+      //-     </div>
+      //-     <div class="row">
+      //-         <div class="col-lg-offset-5 col-lg-2"></div>
+      //-     </div>
+      //- </div>
+
+
+
+  //- div.col-lg-12
+  //-   div.clear-loading.loading-effect-2(style="margin:0 auto;float:none;")
+  //-     span
     //- https://codepen.io/ghost028/pen/GqGYyb
     //- div.container
     //- 	div.dot
@@ -38,3 +64,5 @@ block scripts
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
   script(src="/javascripts/file.js")
+  script.
+    var line = new ProgressBar.Line('#container');

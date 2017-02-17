@@ -20,9 +20,9 @@ block head
                     a(href='#')
                         span.glyphicon.glyphicon-home
                 li
-                    a(href='profile') Your Profile
+                    a(href='javascript:void();') Your Profile
                 li
-                    a(href='#') Statistics
+                    a(id='getStatistics' href='javascript:void();') Statistics
 
 block main
     div.col-lg-6(class="vcenter")
@@ -35,3 +35,6 @@ block main
                 div.panel-body
                     span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
             -}
+
+    div.col-lg-6
+      p Show your timeline when user authenticated
