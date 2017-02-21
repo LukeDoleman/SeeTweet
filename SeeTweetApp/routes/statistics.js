@@ -92,6 +92,19 @@ function getTweetTime(tweet_time) {
   return time;
 }
 
+// http://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
+function add(a,b) {
+  return (a + b);
+}
+
+function convertListToPercentage(list) {
+  var listSum = list.reduce(add, 0);
+  for (var i=0;i<list.length;i++) {
+    list[i] = Math.floor(((list[i]/listSum) * 100)+0.5);
+  }
+  return list;
+}
+
 //http://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
 // function getCurrentDate() {
 //
@@ -181,6 +194,7 @@ router.get('/', function(req, res, next) {
             device[1]++;
         }
       }
+      tweet_days = convertListToPercentage(tweet_days);
       console.log(tweet_days);
       console.log(device);
       var full_ids = getMaxMetric(tweet_ids_max);
