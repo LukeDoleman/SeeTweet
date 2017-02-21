@@ -121,9 +121,9 @@ router.get('/', function(req, res, next) {
                 test.equal(null, err);
                 console.log("Connected correctly to server");
                 // Get the documents collection
-                var collection = db.collection('tweets_db');
+                var collection = db.collection(twitter_handle);
                 // Find some documents
-                collection.find({}).toArray(function(err, docs) {
+                collection.find().toArray(function(err, docs) {
                     test.equal(err, null);
                     //test.equal(2, docs.length);
                     callback(null, docs);

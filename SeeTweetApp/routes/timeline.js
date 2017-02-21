@@ -9,15 +9,14 @@ var client = new Twitter({
 });
 var jsonfile = require('jsonfile');
 var async = require('async');
-
 var MongoClient = require('mongodb').MongoClient;
 var test = require('assert');
 
 // http://www.sebastianseilund.com/nodejs-async-in-practice
 
-var insertDocuments = function(data, db, callback) {
+var insertDocuments = function(collection_name, data, db, callback) {
   // Get the documents collection
-  var collection = db.collection('tweets_db');
+  var collection = db.collection(collection_name);
   // Insert some documents
   collection.insertMany(data, function(err, result) {
     test.equal(err, null);
@@ -32,72 +31,112 @@ router.get('/', function(req, res) {
 
     async.waterfall([
 
+        //Determine if the twitter handle exists in the database already
         function(callback) {
-          client.get('users/show', {
-              screen_name: twitter_handle
-          }, function(error, info, response) {
-              if (!error) {
-                  console.log(info.statuses_count);
-                  callback(null, info.statuses_count);
-              } else {
-                  console.log(error);
-                  console.log(twitter_handle + "- can't be found!!!");
-              }
+          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+              test.equal(null, err);
+              console.log("Connected correctly to server");
+              // Get the documents collection
+              var collection = db.collection(twitter_handle);
+              // Find some documents
+              collection.find().toArray(function(err, existing_tweets) {
+                  test.equal(err, null);
+                  callback(null, existing_tweets);
+              });
           });
+        },
+
+        function(existing_tweets, callback) {
+          //Check if number of statuses could be read from the database
+          if (typeof existing_tweets !== 'undefined' && existing_tweets.length > 0) {
+            console.log(existing_tweets[0].user.statuses_count);
+            //console.log(existing_tweets[0].statuses_count);
+            callback(null, existing_tweets);
+          } else {
+            client.get('users/show', {
+                screen_name: twitter_handle
+            }, function(error, info, response) {
+                if (!error) {
+                    console.log(info.statuses_count);
+                    callback(null, info.statuses_count);
+                } else {
+                    console.log(error);
+                    console.log(twitter_handle + "- can't be found!!!");
+                }
+            });
+          }
         },
 
 
 
-        function(number, callback) {
+        function(existing_tweets, callback) {
+            var number; var exists;
+            if (existing_tweets.constructor === Array) {
+              number = existing_tweets.length;
+              exists = true;
+            } else {
+              number = existing_tweets;
+              exists = false;
+            }
             var x = 0;
             if (number > 3200) number = 3200;
             var iterations = Math.ceil((number / 200));
             var max;
             var list_tweets = [];
 
-            console.log("count is -" + number);
+            console.log("count is - " + number);
 
-            async.whilst(function() {
-                    return x <= iterations;
-                },
+            if (!exists) {
+              async.whilst(function() {
+                      return x <= iterations;
+                  },
 
-                function(next) {
-                    client.get('statuses/user_timeline', {
-                        screen_name: twitter_handle,
-                        count: 200,
-                        max_id: max
-                    }, function(error, tweets, response) {
-                        if (!error) {
-                            console.log("First Tweets Crawled Successfully!");
-                            for (var i = 0; i < tweets.length; i++) {
-                              list_tweets.push(tweets[i]);
-                            }
-                        } else {
-                            console.log(error);
-                        }
-                        console.log(list_tweets.length);
-                        max = list_tweets[list_tweets.length - 1].id;
-                        x++;
-                        next();
-                    });
-                },
+                  function(next) {
+                      client.get('statuses/user_timeline', {
+                          screen_name: twitter_handle,
+                          count: 200,
+                          max_id: max
+                      }, function(error, tweets, response) {
+                          if (!error) {
+                              console.log("First Tweets Crawled Successfully!");
+                              for (var i = 0; i < tweets.length; i++) {
+                                list_tweets.push(tweets[i]);
+                              }
+                          } else {
+                              console.log(error);
+                          }
+                          console.log(list_tweets.length);
+                          max = list_tweets[list_tweets.length - 1].id;
+                          x++;
+                          next();
+                      });
+                  },
 
-                function(err) {
-                    callback(null, list_tweets);
-                    // console.log(err);
-                });
+                  function(err) {
+                      callback(null, exists, list_tweets);
+                      // console.log(err);
+                  });
+            } else {
+              list_tweets = existing_tweets;
+              callback(null, exists, list_tweets);
+            }
+
         },
 
         // Append all tweets crawled to the Database
-        function (list_tweets, callback) {
-          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
-            test.equal(null, err);
-            console.log("Connected correctly to server");
-            insertDocuments(list_tweets, db, function() {
-              db.close();
-              callback(null, list_tweets);
+        function (exists, list_tweets, callback) {
+          if (!exists) {
+            MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+              test.equal(null, err);
+              console.log("Connected correctly to server");
+              insertDocuments(twitter_handle, list_tweets, db, function() {
+                db.close();
+                callback(null, list_tweets);
+              });
             });
-          });
+          } else {
+            callback(null,list_tweets);
+          }
         },
 
         //Extract appropriate list of user mentions from first crawl

@@ -36,26 +36,10 @@ $(document).ready(function() {
         bar.text.style.fontSize = '2rem';
 
         bar.animate(1.0);  // Number from 0.0 to 1.0
-
-        // $("#welcome").append('<div class="row" id="loader">' +
-        //                         '<div class="col-lg-offset-5 col-lg-2">' +
-        //                             '<div id="container">' +
-        //                             '</div>' +
-        //                         '</div>' +
-        //                       '</div>');
-
-        // .row(id="loader")
-        //   .col-lg-offset-5.col-lg-2
-        //     div(id="container")
-
         if (username) { //Ensure the input field is not empty
             var url = document.URL;
             window.location.href = url + 'timeline' + '?' + 'username=' + username;
         }
-
-
-
-
     });
 
     $("#getProfile").click(function() {
