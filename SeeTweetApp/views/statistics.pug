@@ -49,7 +49,7 @@ block main
   .first
     .col-lg-12
       .container(style="border-bottom: 4px solid black;")
-        .h1(style="font-size:52px;") Highlights
+        .h1(style="font-size:52px;") Highlights...
       .container
         div.top-tweets(style="font-size:50px;text-align:center")
           span Most &#32;
@@ -75,10 +75,32 @@ block main
   .second
     .col-lg-12
       .container(style="border-bottom: 4px solid black;")
-        .h1(style="font-size:52px;") Day by day
+        .h1(style="font-size:52px;") Tweet Timing...
       .container
         .col-lg-6
           canvas(id="myLineChart" width="300" height="300")
+        .col-lg-6
+          canvas(id="myRadarChart" width="300" height="300")
+
+  .third
+    .col-lg-12
+      .container(style="border-bottom: 4px solid black;")
+        .h1(style="font-size:52px;") Interactions...
+      .container
+        .col-lg-6
+          canvas(id="myLineChart" width="300" height="300")
+        .col-lg-6
+          canvas(id="myRadarChart" width="300" height="300")
+
+  .fourth
+    .col-lg-12
+      .container(style="border-bottom: 4px solid black;")
+        .h1(style="font-size:52px;") Device Usage...
+      .container
+        .col-lg-6
+          canvas(id="myLineChart" width="300" height="300")
+        .col-lg-6
+          canvas(id="myRadarChart" width="300" height="300")
         //- div.col-lg-6
         //-   canvas(id="myBarChart" width="300" height="300")
         //- div.col-lg-6

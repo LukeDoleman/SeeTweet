@@ -56,8 +56,7 @@ var ctx = document.getElementById("myLineChart");
 var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ["Monday", "Tuesday", "Wednesday", "Thursday",
-                       "Friday", "Saturday", "Sunday"],
+        labels: ["Monday", "Tuesday", "Wednesday", "Thursday"],
         datasets: [{
             label: "You",
             fill: false,
@@ -77,7 +76,7 @@ var myLineChart = new Chart(ctx, {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [20, 30, 50, 20, 40, 10, 60]
+            data: [20, 30, 50, 20]
         }, {
             label: "Your Network",
             fill: false,
@@ -97,10 +96,41 @@ var myLineChart = new Chart(ctx, {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [60, 10, 40, 30, 50, 30, 20]
+            data: [60, 10, 40, 30]
         }],
     // options: options
   }
+});
+
+var ctx = document.getElementById("myRadarChart");
+
+var myRadarChart = new Chart(ctx, {
+    type: 'radar',
+    data : {
+      labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+      datasets: [
+          {
+              label: "My First dataset",
+              backgroundColor: "rgba(179,181,198,0.2)",
+              borderColor: "rgba(179,181,198,1)",
+              pointBackgroundColor: "rgba(179,181,198,1)",
+              pointBorderColor: "#fff",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(179,181,198,1)",
+              data: [65, 59, 90, 81, 56, 55, 40]
+          },
+          {
+              label: "My Second dataset",
+              backgroundColor: "rgba(255,99,132,0.2)",
+              borderColor: "rgba(255,99,132,1)",
+              pointBackgroundColor: "rgba(255,99,132,1)",
+              pointBorderColor: "#fff",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "rgba(255,99,132,1)",
+              data: [28, 48, 40, 19, 96, 27, 100]
+          }
+      ]
+  },
 });
 
 
