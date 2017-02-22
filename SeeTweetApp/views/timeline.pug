@@ -3,21 +3,6 @@ extends layout
 block head_scripts
   link(rel='stylesheet', href='/stylesheets/ion.rangeSlider.css')
   link(rel='stylesheet', href='/stylesheets/ion.rangeSlider.skinFlat.css')
-  script.
-    $(function () {
-        $("#range").ionRangeSlider({
-            hide_min_max: true,
-            keyboard: true,
-            min: 0000,
-            max: 2359,
-            from: 1000,
-            to: 4000,
-            type: 'double',
-            step: 1,
-            prefix: "$",
-            grid: true
-        });
-    });
 
 block head
     nav.navbar.navbar-default(role='navigation')
@@ -43,7 +28,7 @@ block head
 
 block main
   .container
-    .alert.alert-success.alert-dismissible(role='alert')
+    .alert.alert-info.alert-dismissible(role='alert')
       button.close(type='button', data-dismiss='alert', aria-label='Close')
         span(aria-hidden='true') ×
       strong Welcome to SeeTweet -
@@ -54,8 +39,10 @@ block main
       |  date slider to observe changes in your network throughout the average day.
 
   div.col-lg-6
-    div.col-lg-8
+    div.col-lg-10
       input(type='text', id="range" value="" name="range")
+    div.col-lg-2(style="height:60px;padding-top:15px;")
+      button(id="graphUpdate" type="button" class="btn btn-info" style="background-color:#55acee") Update
     svg(style="display:block;margin:auto;" width="600" height="500")
       //- - var slider = new Slider('#ex2', {});
       //- input(id="ex2" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]")
@@ -68,6 +55,26 @@ block scripts
   script(src="/javascripts/file.js")
   script(src="https://d3js.org/d3.v4.min.js")
   script(src="/javascripts/ion.rangeSlider.min.js")
+  script.
+    $(function () {
+        $("#range").ionRangeSlider({
+            hide_min_max: true,
+            keyboard: true,
+            min: 0,
+            max: 24,
+            from: 0,
+            to: 24,
+            type: 'double',
+            step: 1,
+            grid: true,
+            onFinish: function (data) {
+                console.log(data);
+                var trimmedUrl = document.URL.substring(0, document.URL.indexOf("&"));
+                var url = trimmedUrl + '&' + 'time=' + data.from + ',' + data.to;
+                history.replaceState('data to be passed', 'Title of the page', url);
+            }
+        });
+    });
   script.
       window.twttr = (function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0],

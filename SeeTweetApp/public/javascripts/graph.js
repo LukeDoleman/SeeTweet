@@ -9,8 +9,15 @@ $(document).ready(function() {
         'data-height="600" data-dnt="true"' +
         'data-screen-name="' + n + '" href="https://twitter.com/' + n +
         '"> Tweets by @' + n + '</a>');
-    return;
+
+      $("#graphUpdate").click(function() {
+        console.log("xox");
+      });
 });
+
+
+
+
 
 //Select the existing SVG element
 //(initialised on the timeline page)
@@ -71,7 +78,7 @@ node.append("image")
                 },
                 document.getElementById("twitter-wrapper"), {
                     height: 600,
-                    linkColor: "#2B7BB9",
+                    linkColor: "#55acee",
                 }
             );
             return;
