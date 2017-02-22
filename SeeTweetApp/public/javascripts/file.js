@@ -38,7 +38,8 @@ $(document).ready(function() {
         bar.animate(1.0);  // Number from 0.0 to 1.0
         if (username) { //Ensure the input field is not empty
             var url = document.URL;
-            window.location.href = url + 'timeline' + '?' + 'username=' + username;
+            window.location.href = url + 'timeline' + '?' + 'username=' +
+            username + '&time=0,24';
         }
     });
 

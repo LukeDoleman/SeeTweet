@@ -56,19 +56,27 @@ block scripts
   script(src="https://d3js.org/d3.v4.min.js")
   script(src="/javascripts/ion.rangeSlider.min.js")
   script.
+    var time = !{JSON.stringify(time)};
     $(function () {
+        console.log("XXX")
         $("#range").ionRangeSlider({
             hide_min_max: true,
             keyboard: true,
             min: 0,
             max: 24,
-            from: 0,
-            to: 24,
+            //- from: function () { var x = !{JSON.stringify(time)};
+            //-                     console.log(x);
+            //-                     return x[0];},
+            //- to: function () { var x = !{JSON.stringify(time)};
+            //-                     console.log(x);
+            //-                     return x[1];},
+            from: time[0],
+            to: time[1],
             type: 'double',
             step: 1,
             grid: true,
+            postfix: " hours",
             onFinish: function (data) {
-                console.log(data);
                 var trimmedUrl = document.URL.substring(0, document.URL.indexOf("&"));
                 var url = trimmedUrl + '&' + 'time=' + data.from + ',' + data.to;
                 history.replaceState('data to be passed', 'Title of the page', url);

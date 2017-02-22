@@ -27,8 +27,17 @@ var insertDocuments = function(collection_name, data, db, callback) {
 
 router.get('/', function(req, res) {
 
-    var twitter_handle = req.param('username');
+    var twitter_handle = req.query.username;
+    //Time from querystring in form (e.g) ['0','24']
+    var time = req.query.time.split(',').map(function(t) {
+      if (t < 10) {
+        return '0' + t;
+      } else {
+        return t;
+      }
+    });
 
+    console.log(time);
     async.waterfall([
 
         //Determine if the twitter handle exists in the database already
@@ -152,24 +161,28 @@ router.get('/', function(req, res) {
             var matched = [];
             var pattern = /\B@[a-z0-9_-]+/gi;
             for (var i = 0; i < tweets.length; i++) {
-                var stringMatch = (tweets[i].text).match(pattern);
-                if (!!stringMatch) {
-                    for (var j = 0; j < stringMatch.length; j++) {
-                        var arrayMatch = stringMatch[j];
-                        if (matched.indexOf(arrayMatch) >= 0) {
-                            for (var k = 0; k < mentions.handles.length; k++) {
-                                if (mentions.handles[k].user === arrayMatch) {
-                                    mentions.handles[k].count = mentions.handles[k].count + 1;
+                var tweet_creation = tweets[i].created_at.substring(11, 13);
+                if (tweet_creation >= time[0] && tweet_creation < time[1]) {
+                    console.log(tweets[i].created_at);
+                    var stringMatch = (tweets[i].text).match(pattern);
+                    if (!!stringMatch) {
+                        for (var j = 0; j < stringMatch.length; j++) {
+                            var arrayMatch = stringMatch[j];
+                            if (matched.indexOf(arrayMatch) >= 0) {
+                                for (var k = 0; k < mentions.handles.length; k++) {
+                                    if (mentions.handles[k].user === arrayMatch) {
+                                        mentions.handles[k].count = mentions.handles[k].count + 1;
+                                    }
                                 }
-                            }
-                        } else {
-                            if (arrayMatch.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
-                                mentions.handles.push({
-                                    "user": arrayMatch,
-                                    "count": 1,
-                                    "self": false
-                                });
-                                matched.push(arrayMatch);
+                            } else {
+                                if (arrayMatch.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
+                                    mentions.handles.push({
+                                        "user": arrayMatch,
+                                        "count": 1,
+                                        "self": false
+                                    });
+                                    matched.push(arrayMatch);
+                                }
                             }
                         }
                     }
@@ -353,10 +366,14 @@ router.get('/', function(req, res) {
         result.links = result.links.filter(function(n) {
             return n !== undefined;
         });
+
+        time = time.map(Number);
+
         res.status(200).render('timeline', {
             title: 'Home',
             result: result,
-            name: twitter_handle
+            name: twitter_handle,
+            time:time
         });
     });
 });

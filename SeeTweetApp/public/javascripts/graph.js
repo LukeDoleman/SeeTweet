@@ -11,7 +11,8 @@ $(document).ready(function() {
         '"> Tweets by @' + n + '</a>');
 
       $("#graphUpdate").click(function() {
-        console.log("xox");
+        console.log(document.URL);
+        window.location.href = document.URL;
       });
 });
 
