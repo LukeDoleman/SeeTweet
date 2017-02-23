@@ -105,56 +105,14 @@ function convertListToPercentage(list) {
   return list;
 }
 
-//http://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
-// function getCurrentDate() {
-//
-//   console.log(today);
-// }
+function extractMetrics(list) {
 
-//http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
-router.get('/', function(req, res, next) {
-    var twitter_handle = req.param('username');
-
-    async.waterfall([
-        function(callback) {
-            MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
-                test.equal(null, err);
-                console.log("Connected correctly to server");
-                // Get the documents collection
-                var collection = db.collection(twitter_handle);
-                // Find some documents
-                collection.find().toArray(function(err, docs) {
-                    test.equal(err, null);
-                    //test.equal(2, docs.length);
-                    callback(null, docs);
-                });
-            });
-        },
-
-        //Get all docs from twitter_handle-network and pass to main result bit
-        //So that average info can be calculated for all
-        function (docs, callback) {
-          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
-              test.equal(null, err);
-              console.log("Connected correctly to server");
-              // Get the documents collection
-              var collection = db.collection(twitter_handle + "-network");
-              // Find some documents
-              collection.find().toArray(function(err, network_docs) {
-                  test.equal(err, null);
-                  //test.equal(2, docs.length);
-                  callback(null, docs, network_docs);
-              });
-          });
-        },
-
-    ], function(err, docs, network_docs) {
-      console.log('Docs :- ' + docs.length);
-      console.log('Network Docs :- ' + network_docs.length);
-      console.log(network_docs[1]);
-      tweets = docs;
-      var texts=[];
-      var followers = tweets[0].user.followers_count;
+    //!!!!!!!!!!!
+    //!!!!!!!!!!!!
+    //Need to check DB before adding docs so cant use list length
+    //here>  FIX THIS THE 200
+    for (var l in list) {
+      tweets = list[l];
       var statuses = tweets[0].user.statuses_count;
       var created = tweets[tweets.length-1].user.created_at;
       var daysSinceCreation = getDaysSinceFirstTweet(created);
@@ -163,18 +121,16 @@ router.get('/', function(req, res, next) {
       var tweet_days = [0,0,0,0,0,0,0];
       //Desktop Client || Mobile client
       var device = [0,0];
-      for(var i = 0; i < tweets.length;i++) {
-        //Add text for Tweet hover display
-        texts.push(tweets[i].text);
+      for(var i = 0; i < 200;i++) {
         //Get the time tweet was created
         var time = getTweetTime(tweets[i].created_at);
         if (time === "Morning") {
           tweet_times[0]++;
-        } else if (time == "Afternoon"){
+        } else if (time == "Afternoon") {
           tweet_times[1]++;
-        } else if (time == "Evening"){
+        } else if (time == "Evening") {
           tweet_times[2]++;
-        } else if (time == "Early Hours"){
+        } else if (time == "Early Hours") {
           tweet_times[3]++;
         }
         //Get day tweet was created
@@ -214,14 +170,140 @@ router.get('/', function(req, res, next) {
         }
       }
       tweet_days = convertListToPercentage(tweet_days);
-      console.log(tweet_days);
-      console.log(device);
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
+      console.log("Tweet Days:- " + tweet_days);
+      console.log("Device Use:- " + device);
+      console.log("Tweet Times:- " + tweet_times);
+      console.log("Metrics:- " + full_ids);
+      console.log("Average Creation:- " + avg_creation);
+    }
+
+}
+
+//http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
+router.get('/', function(req, res, next) {
+    var twitter_handle = req.param('username');
+
+    async.waterfall([
+        function(callback) {
+            MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+                test.equal(null, err);
+                console.log("Connected correctly to server");
+                // Get the documents collection
+                var collection = db.collection(twitter_handle);
+                // Find some documents
+                collection.find().toArray(function(err, docs) {
+                    test.equal(err, null);
+                    //test.equal(2, docs.length);
+                    callback(null, docs);
+                });
+            });
+        },
+
+        //Get all docs from twitter_handle-network and pass to main result bit
+        //So that average info can be calculated for all
+        function (docs, callback) {
+          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+              test.equal(null, err);
+              console.log("Connected correctly to server");
+              // Get the documents collection
+              var collection = db.collection(twitter_handle + "-network");
+              // Find some documents
+              collection.find().toArray(function(err, network_docs) {
+                  test.equal(err, null);
+                  //test.equal(2, docs.length);
+                  callback(null, docs, network_docs);
+              });
+          });
+        },
+
+        function (docs, network_docs, callback) {
+          var network_metrics = {};
+          for (var i=0;i<network_docs.length;i++) {
+            //is username a key already?
+            if (network_docs[i].user.name in network_metrics) {
+              network_metrics[network_docs[i].user.name].push(network_docs[i]);
+            } else {
+              network_metrics[network_docs[i].user.name] = [network_docs[i]];
+            }
+          }
+          console.log(Object.keys(network_metrics).length);
+          console.log(network_metrics.length);
+          callback(null, docs, network_metrics);
+        },
+
+    ], function(err, docs, network_metrics) {
+      console.log('Docs :- ' + docs.length);
+      console.log('Network Docs :- ' + network_metrics.length);
+      extractMetrics(network_metrics);
+      tweets = docs;
+      var statuses = tweets[0].user.statuses_count;
+      var created = tweets[tweets.length-1].user.created_at;
+      var daysSinceCreation = getDaysSinceFirstTweet(created);
+      var tweet_ids_max = {};
+      var tweet_times = [0,0,0,0];
+      var tweet_days = [0,0,0,0,0,0,0];
+      //Desktop Client || Mobile client
+      var device = [0,0];
+      for(var i = 0; i < tweets.length;i++) {
+        //Get the time tweet was created
+        var time = getTweetTime(tweets[i].created_at);
+        if (time === "Morning") {
+          tweet_times[0]++;
+        } else if (time == "Afternoon") {
+          tweet_times[1]++;
+        } else if (time == "Evening") {
+          tweet_times[2]++;
+        } else if (time == "Early Hours") {
+          tweet_times[3]++;
+        }
+        //Get day tweet was created
+        var day = tweets[i].created_at.substring(0,3);
+        if (day === "Mon") {
+          tweet_days[0]++;
+        } else if (day === "Tue") {
+          tweet_days[1]++;
+        } else if (day === "Wed") {
+          tweet_days[2]++;
+        }else if (day === "Thu") {
+          tweet_days[3]++;
+        }else if (day === "Fri") {
+          tweet_days[4]++;
+        }else if (day === "Sat") {
+          tweet_days[5]++;
+        }else if (day === "Sun") {
+          tweet_days[6]++;
+        }
+
+        if (tweets[i].text.substring(0, 2) != "RT") {
+            tweet_ids_max[tweets[i].id_str] = [tweets[i].retweet_count, tweets[i].favorite_count];
+        }
+        if (tweets[i].source.includes("Twitter for Mac") ||
+            tweets[i].source.includes("Twitter Web Client") ||
+            tweets[i].source.includes("TweetDeck") ||
+            tweets[i].source.includes("Twitter for Websites")
+        ) {
+            device[0]++;
+        } else if (tweets[i].source.includes("Twitter for iPhone") ||
+            tweets[i].source.includes("Twitter for iPad") ||
+            tweets[i].source.includes("Twitter for Android") ||
+            tweets[i].source.includes("Twitter for Android Tablets") ||
+            tweets[i].source.includes("Mobile Web")
+        ) {
+            device[1]++;
+        }
+      }
+      tweet_days = convertListToPercentage(tweet_days);
+      var full_ids = getMaxMetric(tweet_ids_max);
+      var avg_creation = (statuses/daysSinceCreation).toFixed(2);
+      console.log("Tweet Days:- " + tweet_days);
+      console.log("Device Use:- " + device);
+      console.log("Tweet Times:- " + tweet_times);
+      console.log("Metrics:- " + full_ids);
+      console.log("Average Creation:- " + avg_creation);
       res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
-                                            followers:followers, statuses:statuses,
-                                            daysSinceCreation:daysSinceCreation,
-                                            avg_creation:avg_creation, texts:texts,
+                                            avg_creation:avg_creation,
                                             tweet_times:tweet_times, tweet_days:tweet_days,
                                             device:device});
   });
