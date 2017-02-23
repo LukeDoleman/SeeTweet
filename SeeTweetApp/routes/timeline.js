@@ -25,6 +25,17 @@ var insertDocuments = function(collection_name, data, db, callback) {
   });
 };
 
+var insertDocument = function(collection_name, data, db, callback) {
+  // Get the documents collection
+  var collection = db.collection(collection_name);
+  // Insert some documents
+  collection.insert(data, function(err, result) {
+    test.equal(err, null);
+    console.log("Inserted documents into the document collection");
+    callback(result);
+  });
+};
+
 router.get('/', function(req, res) {
 
     var twitter_handle = req.query.username;
@@ -163,7 +174,6 @@ router.get('/', function(req, res) {
             for (var i = 0; i < tweets.length; i++) {
                 var tweet_creation = tweets[i].created_at.substring(11, 13);
                 if (tweet_creation >= time[0] && tweet_creation < time[1]) {
-                    console.log(tweets[i].created_at);
                     var stringMatch = (tweets[i].text).match(pattern);
                     if (!!stringMatch) {
                         for (var j = 0; j < stringMatch.length; j++) {
@@ -217,6 +227,7 @@ router.get('/', function(req, res) {
             var full_mentions = mentions;
             var len = full_mentions.handles.length;
             var x = 1;
+            var full_user_tweets = [];
             async.forEach(full_mentions.handles, function(mention, next) {
                 if (mention.user.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
                     client.get('statuses/user_timeline', {
@@ -230,11 +241,13 @@ router.get('/', function(req, res) {
                             temp_mentions.handles = [];
                             temp_mentions.links = [];
                             var matched = [];
+                            var user_tweets = [];
                             for (var z = 0; z < full_mentions.handles.length; z++) {
                                 matched.push(full_mentions.handles[z].user);
                             }
                             var pattern = /\B@[a-z0-9_-]+/gi;
                             for (var i = 0; i < tweets.length; i++) {
+                                user_tweets.push(tweets[i]);
                                 var stringMatch = (tweets[i].text).match(pattern);
                                 if (!!stringMatch) {
                                     for (var j = 0; j < stringMatch.length; j++) {
@@ -284,6 +297,9 @@ router.get('/', function(req, res) {
                                 }
                             }
 
+                            //Add user tweets to full list for DB
+                            full_user_tweets.push(user_tweets);
+
                             //Sort mentions in descending order
                             temp_mentions.handles.sort(function(a, b) {
                                 return parseFloat(b.count) - parseFloat(a.count);
@@ -319,7 +335,10 @@ router.get('/', function(req, res) {
                             console.log(mention.user + " - can't be found!!!");
                         }
                         if (x === len - 1) {
-                            callback(null, full_mentions);
+                            for (x in full_user_tweets) {
+                              console.log(full_user_tweets[x].length);
+                            }
+                            callback(null, full_mentions, full_user_tweets);
                         } else {
                             x++;
                             next();
@@ -333,6 +352,52 @@ router.get('/', function(req, res) {
                     return callback(err);
                 }
             });
+        },
+
+        //Take the full_user_tweets in a function and write to the database.
+        //then pass full_mentions to next function
+        function(full_mentions, full_user_tweets, callback) {
+          var x = 0;
+          var len = full_user_tweets.length - 1;
+          async.forEach(full_user_tweets, function(user, next) {
+            MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+              test.equal(null, err);
+              console.log("Connected correctly to server");
+              console.log(user.length);
+              //Create new collection for inner ring of user tweets
+              //include a hyphen so as not to conuse with a twitter handle
+              //(illegal character)
+              var network_collection = twitter_handle + "-network";
+              var collection = db.collection(network_collection);
+              // Insert some documents
+              collection.insert(user, function(err, result) {
+                test.equal(err, null);
+                console.log("Inserted documents into the document collection");
+                if (x === len) {
+                    db.close();
+                    callback(null, full_mentions);
+                } else {
+                    console.log("x is - " + x);
+                    x++;
+                    next();
+                }
+              });
+              // insertDocuments(network_collection, user, db, function() {
+              //   db.close();
+              //   if (x === len - 1) {
+              //       callback(null, full_mentions);
+              //   } else {
+              //       console.log("x is - " + x);
+              //       x++;
+              //       next();
+              //   }
+              // });
+            });
+          }, function(err) {
+              if (err) {
+                  return callback(err);
+              }
+          });
         },
 
         //Grab profile images for each user

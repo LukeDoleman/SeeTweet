@@ -129,10 +129,29 @@ router.get('/', function(req, res, next) {
                     callback(null, docs);
                 });
             });
-        }
+        },
 
-    ], function(err, docs) {
-      console.log(docs.length);
+        //Get all docs from twitter_handle-network and pass to main result bit
+        //So that average info can be calculated for all
+        function (docs, callback) {
+          MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+              test.equal(null, err);
+              console.log("Connected correctly to server");
+              // Get the documents collection
+              var collection = db.collection(twitter_handle + "-network");
+              // Find some documents
+              collection.find().toArray(function(err, network_docs) {
+                  test.equal(err, null);
+                  //test.equal(2, docs.length);
+                  callback(null, docs, network_docs);
+              });
+          });
+        },
+
+    ], function(err, docs, network_docs) {
+      console.log('Docs :- ' + docs.length);
+      console.log('Network Docs :- ' + network_docs.length);
+      console.log(network_docs[1]);
       tweets = docs;
       var texts=[];
       var followers = tweets[0].user.followers_count;
@@ -142,7 +161,7 @@ router.get('/', function(req, res, next) {
       var tweet_ids_max = {};
       var tweet_times = [0,0,0,0];
       var tweet_days = [0,0,0,0,0,0,0];
-      //Desktop Client|| Mobile client
+      //Desktop Client || Mobile client
       var device = [0,0];
       for(var i = 0; i < tweets.length;i++) {
         //Add text for Tweet hover display
