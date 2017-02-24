@@ -218,6 +218,10 @@ function extractMetrics(list) {
     console.log("Average Device = " + average_device);
     console.log("Average Day = " + average_day);
     console.log("Average Time = " + average_time);
+    average_device = convertListToPercentage(average_device);
+    average_time = convertListToPercentage(average_time);
+    // console.log(av);
+    // console.log(tweet_times);
     list_metrics = [];
     list_metrics.push(average_tweets,average_device,average_day,average_time);
     return list_metrics;
@@ -348,6 +352,13 @@ router.get('/', function(req, res, next) {
       console.log("Tweet Times:- " + tweet_times);
       console.log("Metrics:- " + full_ids);
       console.log("Average Creation:- " + avg_creation);
+
+      // device[0] = (device[0] + device[1]) / 2;
+      // device[1] = (device[0] + device[1]) / 2;
+      device = convertListToPercentage(device);
+      tweet_times = convertListToPercentage(tweet_times);
+      console.log(device);
+      console.log(tweet_times);
 
       console.log("---------------------------------------");
       console.log(network_metrics_complete);

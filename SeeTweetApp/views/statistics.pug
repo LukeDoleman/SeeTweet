@@ -82,8 +82,10 @@ block main
         .h1(style="font-size:52px;") Tweet Timing...
       .container
         .col-lg-6
+          .h1 % of Tweets by Time
           canvas(id="myLineChart" width="300" height="300")
         .col-lg-6
+          .h1 % of Tweets by Day
           canvas(id="myRadarChart" width="300" height="300")
 
   .third
@@ -102,9 +104,11 @@ block main
         .h1(style="font-size:52px;") Device Usage...
       .container
         .col-lg-6
-          canvas(id="myLineChart" width="300" height="300")
+          .h1 Your Device Use
+          canvas(id="myChart" width="300" height="300")
         .col-lg-6
-          canvas(id="myRadarChart" width="300" height="300")
+          .h1 Network Device Use
+          canvas(id="myPieChart" width="300" height="300")
         //- div.col-lg-6
         //-   canvas(id="myBarChart" width="300" height="300")
         //- div.col-lg-6
