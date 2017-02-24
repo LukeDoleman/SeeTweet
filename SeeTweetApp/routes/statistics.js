@@ -111,6 +111,7 @@ function extractMetrics(list) {
     //!!!!!!!!!!!!
     //Need to check DB before adding docs so cant use list length
     //here>  FIX THIS THE 200
+    var list_metrics = [];
     for (var l in list) {
       tweets = list[l];
       var statuses = tweets[0].user.statuses_count;
@@ -119,6 +120,7 @@ function extractMetrics(list) {
       var tweet_ids_max = {};
       var tweet_times = [0,0,0,0];
       var tweet_days = [0,0,0,0,0,0,0];
+      var local_metrics = [];
       //Desktop Client || Mobile client
       var device = [0,0];
       for(var i = 0; i < 200;i++) {
@@ -177,8 +179,48 @@ function extractMetrics(list) {
       console.log("Tweet Times:- " + tweet_times);
       console.log("Metrics:- " + full_ids);
       console.log("Average Creation:- " + avg_creation);
+      local_metrics.push(avg_creation, device, tweet_days, tweet_times);
+      list_metrics.push(local_metrics);
     }
-
+    //Get average list from all the lists
+    //[["2.24",[96,7],[12,17,21,22,26,3,2],[1,95,94,10]]
+    var average_list_metrics = [];
+    //Get average tweet per day (0)
+    var average_tweets=0;
+    //Get average device use
+    var average_device=[0,0];
+    //Get average day use
+    var average_day=[0,0,0,0,0,0,0];
+    //Get average time use
+    var average_time=[0,0,0,0];
+    //there is a more clever way to do this i bet
+    for (var j=0;j<list_metrics.length;j++) {
+      average_tweets = average_tweets + parseInt(list_metrics[j][0]);
+      average_device[0] = average_device[0] + list_metrics[j][1][0];
+      average_device[1] = average_device[1] + list_metrics[j][1][1];
+      for (var k=0;k<average_day.length;k++) {
+        average_day[k] = average_day[k] + list_metrics[j][2][k];
+      }
+      for (var n=0;n<average_time.length;n++) {
+        average_time[n] = average_time[n] + list_metrics[j][3][n];
+      }
+    }
+    average_tweets = average_tweets/list_metrics.length;
+    average_device[0] = parseInt(average_device[0]/list_metrics.length);
+    average_device[1] = parseInt(average_device[1]/list_metrics.length);
+    for (var m=0;m<average_day.length;m++) {
+      average_day[m] = parseInt(average_day[m]/list_metrics.length);
+    }
+    for (var o=0;o<average_time.length;o++) {
+      average_time[o] = parseInt(average_time[o]/list_metrics.length);
+    }
+    console.log("Average Tweets = " + average_tweets);
+    console.log("Average Device = " + average_device);
+    console.log("Average Day = " + average_day);
+    console.log("Average Time = " + average_time);
+    list_metrics = [];
+    list_metrics.push(average_tweets,average_device,average_day,average_time);
+    return list_metrics;
 }
 
 //http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
@@ -236,7 +278,10 @@ router.get('/', function(req, res, next) {
     ], function(err, docs, network_metrics) {
       console.log('Docs :- ' + docs.length);
       console.log('Network Docs :- ' + network_metrics.length);
-      extractMetrics(network_metrics);
+      var network_metrics_complete = extractMetrics(network_metrics);
+      // console.log(network_metrics_complete);
+      // console.log(network_metrics_complete[0][2]);
+
       tweets = docs;
       var statuses = tweets[0].user.statuses_count;
       var created = tweets[tweets.length-1].user.created_at;
@@ -246,6 +291,7 @@ router.get('/', function(req, res, next) {
       var tweet_days = [0,0,0,0,0,0,0];
       //Desktop Client || Mobile client
       var device = [0,0];
+      var metrics_complete = [];
       for(var i = 0; i < tweets.length;i++) {
         //Get the time tweet was created
         var time = getTweetTime(tweets[i].created_at);
@@ -302,10 +348,18 @@ router.get('/', function(req, res, next) {
       console.log("Tweet Times:- " + tweet_times);
       console.log("Metrics:- " + full_ids);
       console.log("Average Creation:- " + avg_creation);
-      res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
-                                            avg_creation:avg_creation,
-                                            tweet_times:tweet_times, tweet_days:tweet_days,
-                                            device:device});
+
+      console.log("---------------------------------------");
+      console.log(network_metrics_complete);
+
+      metrics_complete.push(avg_creation, device, full_ids, tweet_days, tweet_times);
+      console.log(metrics_complete);
+      // res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
+      //                                       avg_creation:avg_creation,
+      //                                       tweet_times:tweet_times, tweet_days:tweet_days,
+      //                                       device:device});
+      res.status(200).render('statistics', {title:'Statistics', user_metrics:metrics_complete,
+                                            network_metrics:network_metrics_complete});
   });
 });
 

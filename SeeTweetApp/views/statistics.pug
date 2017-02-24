@@ -3,9 +3,13 @@ extends layout
 block head_scripts
   script(src="/javascripts/Chart.bundle.min.js")
   script.
-    var tweet_times = !{JSON.stringify(tweet_times)}
-    var tweet_days = !{JSON.stringify(tweet_days)}
-    var device = !{JSON.stringify(device)}
+    //- var tweet_times = !{JSON.stringify(tweet_times)}
+    //- var tweet_days = !{JSON.stringify(tweet_days)}
+    //- var device = !{JSON.stringify(device)}
+    var user_metrics = !{JSON.stringify(user_metrics)}
+    var network_metrics = !{JSON.stringify(network_metrics)}
+    console.log(user_metrics);
+    console.log(network_metrics);
 
 block head
 
@@ -170,6 +174,6 @@ block scripts
       return t;
       }(document, "script", "twitter-wjs"));
   script(src="/javascripts/file.js")
-  script.
-      var local_metrics = !{JSON.stringify(metrics)};
+  //- script.
+  //-     var local_metrics = !{JSON.stringify(metrics)};
   script(src="/javascripts/stats.js")
