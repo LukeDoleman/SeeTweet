@@ -25,7 +25,7 @@ block head
                     a(id='getStatistics' href='javascript:void();') Statistics
 
 block main
-    div.col-lg-6(class="vcenter")
+    div.col-lg-12(class="vcenter")
         div.panel.panel-default
             div.panel-heading
                 h3.panel-title
@@ -35,6 +35,3 @@ block main
                 div.panel-body
                     span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
             -}
-
-    div.col-lg-6
-      p Show your timeline when user authenticated

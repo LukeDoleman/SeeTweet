@@ -123,8 +123,15 @@ function extractMetrics(list) {
       var local_metrics = [];
       //Desktop Client || Mobile client
       var device = [0,0];
-      for(var i = 0; i < 200;i++) {
+      var test;
+      if (tweets.length >= 200) {
+        list_length = 200;
+      } else {
+        list_length = tweets.length;
+      }
+      for(var i = 0; i < list_length;i++) {
         //Get the time tweet was created
+        console.log(i);
         var time = getTweetTime(tweets[i].created_at);
         if (time === "Morning") {
           tweet_times[0]++;
@@ -281,7 +288,7 @@ router.get('/', function(req, res, next) {
 
     ], function(err, docs, network_metrics) {
       console.log('Docs :- ' + docs.length);
-      console.log('Network Docs :- ' + network_metrics.length);
+      console.log('Network Docs :- ' + network_metrics);
       var network_metrics_complete = extractMetrics(network_metrics);
       // console.log(network_metrics_complete);
       // console.log(network_metrics_complete[0][2]);
@@ -370,7 +377,8 @@ router.get('/', function(req, res, next) {
       //                                       tweet_times:tweet_times, tweet_days:tweet_days,
       //                                       device:device});
       res.status(200).render('statistics', {title:'Statistics', user_metrics:metrics_complete,
-                                            network_metrics:network_metrics_complete});
+                                            network_metrics:network_metrics_complete,
+                                            statuses:statuses});
   });
 });
 

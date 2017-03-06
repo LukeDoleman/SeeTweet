@@ -360,6 +360,17 @@ router.get('/', function(req, res) {
           var x = 0;
           var len = full_user_tweets.length - 1;
           async.forEach(full_user_tweets, function(user, next) {
+            // if (user.length === 0) {
+            //   console.log("XXX");
+            //   if (x === len) {
+            //       db.close();
+            //       callback(null, full_mentions);
+            //   } else {
+            //       console.log("x is - " + x);
+            //       x++;
+            //       next();
+            //   }
+            // }
             MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
               test.equal(null, err);
               console.log("Connected correctly to server");

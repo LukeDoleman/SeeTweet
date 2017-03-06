@@ -1,21 +1,18 @@
 $(window).on( "load", function() {
-  $('[data-toggle="tooltip"]').tooltip();
-  console.log("xx");
-  for (var i=0;i<network_metrics[2][0].length;i++) {
-    // console.log(network_metrics[2][0][i]);
+  console.log(user_metrics[2][0]);
+  console.log(user_metrics[2][1]);
+  for (var i=0;i<user_metrics[2][0].length;i++) {
     twttr.widgets.createTweet(
-        network_metrics[2][0][i],
+        user_metrics[2][0][i],
         document.getElementById("tweet-wrapper"), {
             theme: 'light',
             align: 'left',
             width: '370',
         }
     );
-  }
 
-  for (var j=0;j<network_metrics[2][1].length;j++) {
     twttr.widgets.createTweet(
-        network_metrics[2][1][i],
+        user_metrics[2][1][i],
         document.getElementById("likes-wrapper"), {
             theme: 'light',
             align: 'left',
@@ -23,42 +20,13 @@ $(window).on( "load", function() {
         }
     );
   }
-
-  $("input[name='2']").change(function() {
-    $("#r1").prop('checked', false);
-    $("#tweet-wrapper").empty();
-    for (var i=0;i<local_metrics[1].length;i++) {
-      twttr.widgets.createTweet(
-          local_metrics[1][i],
-          document.getElementById("tweet-wrapper"), {
-              theme: 'light',
-          }
-      );
-    }
-  });
-
-  $("input[name='1']").change(function() {
-    $("#r2").prop('checked', false);
-    $("#tweet-wrapper").empty();
-    for (var i=0;i<local_metrics[0].length;i++) {
-      twttr.widgets.createTweet(
-          local_metrics[0][i],
-          document.getElementById("tweet-wrapper"), {
-              theme: 'light',
-          }
-      );
-    }
-  });
 });
 
-
 /*
-
   var user_metrics = ["1.44",[2173,150],[["563828118389932033","725065580198395905",
   "217271405996290049"],["685560805799161856","725065580198395905","684678799896625152"]]
   ,[17,19,19,20,19,4,2],[237,1642,1113,254]]
   var network_metrics = [5.5,[67,53],[14,17,17,16,12,9,13],[14,54,77,53]]
-
 */
 
 var ctx = document.getElementById("myLineChart");
@@ -72,16 +40,16 @@ var myLineChart = new Chart(ctx, {
             fill: false,
             lineTension: 0.1,
             backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
+            borderColor: "#FF6384",
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter',
-            pointBorderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "#FF6384",
             pointBackgroundColor: "#fff",
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBackgroundColor: "#FF6384",
             pointHoverBorderColor: "rgba(220,220,220,1)",
             pointHoverBorderWidth: 2,
             pointRadius: 1,
@@ -92,16 +60,16 @@ var myLineChart = new Chart(ctx, {
             fill: false,
             lineTension: 0.1,
             backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
+            borderColor: "#36A2EB",
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter',
-            pointBorderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "#36A2EB",
             pointBackgroundColor: "#fff",
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBackgroundColor: "#36A2EB",
             pointHoverBorderColor: "rgba(220,220,220,1)",
             pointHoverBorderWidth: 2,
             pointRadius: 1,
@@ -122,21 +90,21 @@ var myRadarChart = new Chart(ctx, {
           {
               label: "You",
               backgroundColor: "rgba(179,181,198,0.2)",
-              borderColor: "rgba(179,181,198,1)",
-              pointBackgroundColor: "rgba(179,181,198,1)",
+              borderColor: "#FF6384",
+              pointBackgroundColor: "#FF6384",
               pointBorderColor: "#fff",
               pointHoverBackgroundColor: "#fff",
-              pointHoverBorderColor: "rgba(179,181,198,1)",
+              pointHoverBorderColor: "#FF6384",
               data: user_metrics[3]
           },
           {
               label: "Your Network",
               backgroundColor: "rgba(255,99,132,0.2)",
-              borderColor: "rgba(255,99,132,1)",
-              pointBackgroundColor: "rgba(255,99,132,1)",
+              borderColor: "#36A2EB",
+              pointBackgroundColor: "#36A2EB",
               pointBorderColor: "#fff",
               pointHoverBackgroundColor: "#fff",
-              pointHoverBorderColor: "rgba(255,99,132,1)",
+              pointHoverBorderColor: "#36A2EB",
               data: network_metrics[2]
           }
       ]
@@ -159,16 +127,12 @@ var myChart = new Chart(ctx, {
                 backgroundColor: [
                     "#FF6384",
                     "#36A2EB",
-                    "#FFCE56",
-                    "#24ff00"
 
                 ],
                 // borderColor: "transparent",
                 hoverBackgroundColor: [
                     "#FF6384",
                     "#36A2EB",
-                    "#FFCE56",
-                    "#24ff00"
                 ]
             }]
     },

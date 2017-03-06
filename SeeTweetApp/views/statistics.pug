@@ -3,13 +3,12 @@ extends layout
 block head_scripts
   script(src="/javascripts/Chart.bundle.min.js")
   script.
-    //- var tweet_times = !{JSON.stringify(tweet_times)}
-    //- var tweet_days = !{JSON.stringify(tweet_days)}
-    //- var device = !{JSON.stringify(device)}
     var user_metrics = !{JSON.stringify(user_metrics)}
     var network_metrics = !{JSON.stringify(network_metrics)}
+    var statuses = !{JSON.stringify(statuses)}
     console.log(user_metrics);
     console.log(network_metrics);
+    console.log(statuses);
 
 block head
 
@@ -45,11 +44,6 @@ block main
       |  insight into the tweeting habits of your profile and the people you
       |  interact with most often.
 
-    //- .jumbotron
-    //-   .h1 Hey there xo
-    //-   //- <p>...</p>
-
-
   .first
     .col-lg-12
       .container(style="border-bottom: 4px solid black;")
@@ -59,15 +53,6 @@ block main
           span Most &#32;
           span.glyphicon.glyphicon-retweet(style="color:#19CF86;")
           span &#32;'s
-          //-img(src="images/twitter_like.png" style="width:64px;height:64px;")
-          //- div.radio-select
-          //-   form
-          //-     label.radio-inline
-          //-       input(id="r1" type='radio', name='1', checked="checked")
-          //-       | Number of Retweets
-          //-     label.radio-inline
-          //-       input(id="r2" type='radio', name='2')
-          //-       | Number of Likes
           div.twitter-tweet(id="tweet-wrapper")
       .container
         div.top-likes(style="font-size:50px;text-align:center")
@@ -82,10 +67,10 @@ block main
         .h1(style="font-size:52px;") Tweet Timing...
       .container
         .col-lg-6
-          .h1 % of Tweets by Time
+          .h1(style="text-align:center;text-decoration:underline") % of Tweets by Time
           canvas(id="myLineChart" width="300" height="300")
         .col-lg-6
-          .h1 % of Tweets by Day
+          .h1(style="text-align:center;text-decoration:underline") % of Tweets by Day
           canvas(id="myRadarChart" width="300" height="300")
 
   .third
@@ -93,10 +78,13 @@ block main
       .container(style="border-bottom: 4px solid black;")
         .h1(style="font-size:52px;") Interactions...
       .container
-        .col-lg-6
-          canvas(id="myLineChart" width="300" height="300")
-        .col-lg-6
-          canvas(id="myRadarChart" width="300" height="300")
+        .col-lg-10.col-lg-offset-1(style="font-size:52px;padding-top:25px;padding-bottom:25px")
+          p With a total of <strong style="color:#FF6384">!{statuses}</strong> tweets,
+            | you tweet on average <strong style="color:#FF6384">!{user_metrics[0]}</strong>
+            | times a day compared with
+            | an average of <strong style="color:#36A2EB">!{network_metrics[0]}</strong>
+            | times for your network
+
 
   .fourth
     .col-lg-12
@@ -104,10 +92,10 @@ block main
         .h1(style="font-size:52px;") Device Usage...
       .container
         .col-lg-6
-          .h1 Your Device Use
+          .h1(style="text-align:center;text-decoration:underline") Your Device Use
           canvas(id="myChart" width="300" height="300")
         .col-lg-6
-          .h1 Network Device Use
+          .h1(style="text-align:center;text-decoration:underline") Network Device Use
           canvas(id="myPieChart" width="300" height="300")
         //- div.col-lg-6
         //-   canvas(id="myBarChart" width="300" height="300")

@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+    $("#splash").fadeIn(2000);
+    $("#searchBar").fadeIn(6000);
+
     $("#getTweets").click(function() {
         var username = $('#userInput').val();
         $("#welcome").empty();
