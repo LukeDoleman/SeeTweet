@@ -26,12 +26,22 @@ block head
 
 block main
     div.col-lg-12(class="vcenter")
-        div.panel.panel-default
+        div.panel.panel-info
             div.panel-heading
                 h3.panel-title
                     img(src=pic)
-                    span  #{user} #{followers} <br><br> #{description} <br> #{mentions}
-            -for(var i = 0; i < tweets.length; ++i){
-                div.panel-body
-                    span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
-            -}
+                    span(style="vertical-align:bottom")  #{user} #{followers} #{description} #{mentions}
+
+    -for(var i = 0; i < tweets.length; ++i){
+      .col-lg-4(style="float:left")
+        .panel.panel-info
+          .panel-heading
+            .panel-title(style="text-align:center;")
+              span.glyphicon.glyphicon-retweet(style="color:#19CF86;")
+              span &#32; <b>#{favs[i]}</b>
+              span &#32;
+              span.glyphicon.glyphicon-heart(style="color:#E81C4F;")
+              span &#32; <b>#{retweets[i]}</b>
+          .panel-body
+            span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
+    -}

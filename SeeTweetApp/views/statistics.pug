@@ -34,8 +34,6 @@ block head
           a(id='getStatistics' href='javascript:void();' style="text-decoration:underline") Statistics
 
 block main
-
-
   .container
     .alert.alert-success.alert-dismissible(role='alert')
       button.close(type='button', data-dismiss='alert', aria-label='Close')
@@ -103,47 +101,6 @@ block main
         //-   canvas(id="myChart" width="300" height="300")
         //-   canvas(id="myPieChart" width="300" height="300")
 
-  //- div.row.first(style="padding-bottom:70px;")
-  //-   div.col-lg-8
-  //-     p(style="font-size:72px;text-align:center;") <strong style="color:#111;">#{statuses}</strong> Tweets Tweeted...
-  //-     div(id="little-birds")
-  //-       each val in texts
-  //-         img(src="images/Twitter_Logo_Blue.png" data-toggle="tooltip" title=val style="width:24px;height:24px;")
-  //-   div.col-lg-4
-  //-     p(style="font-size:72px") Tweeting Times...
-  //-     canvas(id="myChart" width="300" height="300")
-  //-
-  //- div.row.second
-  //-   div.col-lg-12
-  //-     p(style="font-size:72px;") On average <strong style="color:#111">#{avg_creation}</strong> Tweets per day
-  //-   div.col-lg-12
-  //-     div.col-lg-6
-  //-       canvas(id="myBarChart" width="300" height="300")
-  //-     div.col-lg-6
-  //-       p Users I Reweet the most
-  //-       p List of commonly used hashtags <br/> <br/> <br/>
-  //-
-  //- div.row.fourth
-  //-   div.col-lg-1
-  //-   div.col-lg-4
-  //-     p(style="font-size:72px;text-align:center") Device Usage
-  //-     canvas(id="myPieChart" width="300" height="300")
-  //-     p(style="font-size:72px;") With an average of <strong style="color:#111">X</strong> Likes and <strong style="color:#111">X</strong> retweets per tweet...
-  //-
-  //-   div.col-lg-1
-  //-   div.col-lg-6
-  //-     div.top-tweets(style="text-align:center;")
-  //-       p(style="font-size:64px;") Top Tweets
-  //-       div.radio-select
-  //-         form
-  //-           label.radio-inline
-  //-             input(id="r1" type='radio', name='1', checked="checked")
-  //-             | Number of Retweets
-  //-           label.radio-inline
-  //-             input(id="r2" type='radio', name='2')
-  //-             | Number of Likes
-  //-         div.twitter-tweet(id="tweet-wrapper")
-
 block scripts
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
@@ -166,6 +123,4 @@ block scripts
       return t;
       }(document, "script", "twitter-wjs"));
   script(src="/javascripts/file.js")
-  //- script.
-  //-     var local_metrics = !{JSON.stringify(metrics)};
   script(src="/javascripts/stats.js")
