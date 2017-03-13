@@ -1,19 +1,6 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  /*background: #D3959B; /* fallback for old browsers */
-  /*background: -webkit-linear-gradient(to left, #D3959B , #BFE6BA); /* Chrome 10-25, Safari 5.1-6 */
-  /*background: linear-gradient(to left, #D3959B , #BFE6BA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+
-  */
-
   background-color: #FFF;
-
-
-  /*background: #E0EAFC; /* fallback for old browsers */
-  /*background: -webkit-linear-gradient(to left, #E0EAFC , #CFDEF3); /* Chrome 10-25, Safari 5.1-6 */
-  /*background: linear-gradient(to left, #E0EAFC , #CFDEF3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-
-
 }
 
 .navbar-default .navbar-brand:hover {
@@ -77,23 +64,6 @@ image {
 input[type=radio] {
   display: inline;
 }
-
-#little-birds {
-  overflow:hidden;
-  height: 500px;
-  background-color:transparent;
-  padding-left: 25px;
-  padding-right: 25px;
-  /*-webkit-box-shadow: 10px 10px 35px -15px rgba(0,0,0,0.75);
-  -moz-box-shadow: 10px 10px 35px -15px rgba(0,0,0,0.75);
-  box-shadow: 10px 10px 35px -15px rgba(0,0,0,0.75);*/
-
-}
-
-#little-birds:hover {
-  overflow-y: scroll;
-}
-
 
 /* http://codepen.io/ClearDesign/pen/pJrLwm*/
 /* CSS FOR LOADING SYMBOL */
@@ -193,11 +163,4 @@ input[type=radio] {
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
-
-/*#container {*/
-  /*margin: 20px;
-  width: 200px;
-  height: 200px;
-  position: relative;
 }

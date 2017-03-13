@@ -1,12 +1,11 @@
 $(document).ready(function() {
-
     $("#splash").fadeIn(2000);
     $("#searchBar").fadeIn(6000);
-
     $("#getTweets").click(function() {
         var username = $('#userInput').val();
         $("#welcome").empty();
         $("#loader").attr("style", "");
+
         // progressbar.js@1.0.0 version is used
         // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
         var bar = new ProgressBar.Circle(container, {

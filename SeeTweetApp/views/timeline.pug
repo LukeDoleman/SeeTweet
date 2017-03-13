@@ -22,9 +22,9 @@ block head
                     a(href='#')
                         span(style="text-decoration:underline").glyphicon.glyphicon-home
                 li
-                    a(id='getProfile' href='javascript:void();') Your Profile
+                    a(id='getProfile' href='javascript:void();') !{name}'s Profile
                 li
-                    a(id='getStatistics' href='javascript:void();') Statistics
+                    a(id='getStatistics' href='javascript:void();') !{name}'s Statistics
 
 block main
   .container
@@ -32,11 +32,11 @@ block main
       button.close(type='button', data-dismiss='alert', aria-label='Close')
         span(aria-hidden='true') ×
       strong Welcome to SeeTweet -
-      |  This site aims to give you an
-      |  insight into the tweeting habits of your profile. <br/><br/>
-      |  The graph below shows a network of the other twitter users you interact
-      |  with most often. Click on a user to see their timeline and change the
-      |  date slider to observe changes in your network throughout the average day.
+      |  This site aims to give you an insight into the tweeting habits of 
+      |  your chosen profile.<br/><br/> The graph below shows a network of the 
+      |  other twitter users your profile interacts with most often. 
+      |  Click on a user to see their timeline and change the date slider to 
+      |  observe changes in your profile's network throughout the average day.
 
   div.col-lg-6
     div.col-lg-10

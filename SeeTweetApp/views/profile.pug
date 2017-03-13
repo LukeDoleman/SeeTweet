@@ -33,10 +33,10 @@ block main
                     span(style="vertical-align:bottom")  #{user} #{followers} #{description} #{mentions}
 
     -for(var i = 0; i < tweets.length; ++i){
-      .col-lg-4(style="float:left")
+      .col-lg-4
         .panel.panel-info
           .panel-heading
-            .panel-title(style="text-align:center;")
+            .panel-title
               span.glyphicon.glyphicon-retweet(style="color:#19CF86;")
               span &#32; <b>#{favs[i]}</b>
               span &#32;
