@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var request = require('request');
+// var request = require('request');
 var Twitter = require('twitter');
 var client = new Twitter({
     consumer_key: 'izFoNkDtE3ZPo0incOx03Z0on',
@@ -50,7 +50,6 @@ router.get('/', function(req, res) {
 
     console.log(time);
     async.waterfall([
-
         //Determine if the twitter handle exists in the database already
         function(callback) {
           MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
@@ -77,11 +76,14 @@ router.get('/', function(req, res) {
                 screen_name: twitter_handle
             }, function(error, info, response) {
                 if (!error) {
-                    console.log(info.statuses_count);
                     callback(null, info.statuses_count);
                 } else {
-                    console.log(error);
-                    console.log(twitter_handle + "- can't be found!!!");
+                  console.log(error);
+                  console.log(twitter_handle + " - can't be found!");
+                  res.status(400).render('error', {
+                      title: 'Error',
+                      name: twitter_handle,
+                  });
                 }
             });
           }
@@ -360,17 +362,6 @@ router.get('/', function(req, res) {
           var x = 0;
           var len = full_user_tweets.length - 1;
           async.forEach(full_user_tweets, function(user, next) {
-            // if (user.length === 0) {
-            //   console.log("XXX");
-            //   if (x === len) {
-            //       db.close();
-            //       callback(null, full_mentions);
-            //   } else {
-            //       console.log("x is - " + x);
-            //       x++;
-            //       next();
-            //   }
-            // }
             MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
               test.equal(null, err);
               console.log("Connected correctly to server");

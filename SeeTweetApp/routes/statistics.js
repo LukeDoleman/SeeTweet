@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var request = require('request');
+// var request = require('request');
 var Twitter = require('twitter');
 var client = new Twitter({
   consumer_key: 'izFoNkDtE3ZPo0incOx03Z0on',

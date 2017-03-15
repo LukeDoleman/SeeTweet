@@ -46,6 +46,15 @@ $(document).ready(function() {
         }
     });
 
+    $("#searchAgain").click(function() {
+      var url = window.location.href;
+      var new_url;
+      new_url = url.substr(0, url.lastIndexOf("/"));
+      console.log(url);
+      console.log(new_url);
+      window.location.href = new_url;
+    });
+
     $("#getProfile").click(function() {
         var url = window.location.href;
         var new_url;

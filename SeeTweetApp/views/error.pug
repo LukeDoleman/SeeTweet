@@ -1,6 +1,15 @@
 extends layout
 
-//- block content
-//-   h1= message
-//-   h2= error.status
-//-   pre #{error.stack}
+block main
+  .container
+    .error-wrapper(style="text-align:center;")
+      .h1 Can't find user - <strong>!{name}</strong><br><br>
+        .h2 Try a different username
+        
+        button(id="searchAgain" type="button" class="btn btn-info" 
+        style="background-color:#55acee") Search Again
+
+block scripts
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+  script(src="/javascripts/file.js")
