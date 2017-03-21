@@ -106,9 +106,6 @@ function convertListToPercentage(list) {
 }
 
 function extractMetrics(list) {
-
-    //!!!!!!!!!!!
-    //!!!!!!!!!!!!
     //Need to check DB before adding docs so cant use list length
     //here>  FIX THIS THE 200
     var list_metrics = [];
@@ -131,7 +128,6 @@ function extractMetrics(list) {
       }
       for(var i = 0; i < list_length;i++) {
         //Get the time tweet was created
-        console.log(i);
         var time = getTweetTime(tweets[i].created_at);
         if (time === "Morning") {
           tweet_times[0]++;
@@ -181,11 +177,6 @@ function extractMetrics(list) {
       tweet_days = convertListToPercentage(tweet_days);
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
-      console.log("Tweet Days:- " + tweet_days);
-      console.log("Device Use:- " + device);
-      console.log("Tweet Times:- " + tweet_times);
-      console.log("Metrics:- " + full_ids);
-      console.log("Average Creation:- " + avg_creation);
       local_metrics.push(avg_creation, device, tweet_days, tweet_times);
       list_metrics.push(local_metrics);
     }
@@ -221,14 +212,8 @@ function extractMetrics(list) {
     for (var o=0;o<average_time.length;o++) {
       average_time[o] = parseInt(average_time[o]/list_metrics.length);
     }
-    console.log("Average Tweets = " + average_tweets);
-    console.log("Average Device = " + average_device);
-    console.log("Average Day = " + average_day);
-    console.log("Average Time = " + average_time);
     average_device = convertListToPercentage(average_device);
     average_time = convertListToPercentage(average_time);
-    // console.log(av);
-    // console.log(tweet_times);
     list_metrics = [];
     list_metrics.push(average_tweets,average_device,average_day,average_time);
     return list_metrics;
@@ -290,9 +275,6 @@ router.get('/', function(req, res, next) {
       console.log('Docs :- ' + docs.length);
       console.log('Network Docs :- ' + network_metrics);
       var network_metrics_complete = extractMetrics(network_metrics);
-      // console.log(network_metrics_complete);
-      // console.log(network_metrics_complete[0][2]);
-
       tweets = docs;
       var statuses = tweets[0].user.statuses_count;
       var created = tweets[tweets.length-1].user.created_at;
@@ -359,26 +341,17 @@ router.get('/', function(req, res, next) {
       console.log("Tweet Times:- " + tweet_times);
       console.log("Metrics:- " + full_ids);
       console.log("Average Creation:- " + avg_creation);
-
-      // device[0] = (device[0] + device[1]) / 2;
-      // device[1] = (device[0] + device[1]) / 2;
       device = convertListToPercentage(device);
       tweet_times = convertListToPercentage(tweet_times);
       console.log(device);
       console.log(tweet_times);
-
       console.log("---------------------------------------");
       console.log(network_metrics_complete);
-
       metrics_complete.push(avg_creation, device, full_ids, tweet_days, tweet_times);
       console.log(metrics_complete);
-      // res.status(200).render('statistics', {title:'Statistics', metrics:full_ids,
-      //                                       avg_creation:avg_creation,
-      //                                       tweet_times:tweet_times, tweet_days:tweet_days,
-      //                                       device:device});
       res.status(200).render('statistics', {title:'Statistics', user_metrics:metrics_complete,
                                             network_metrics:network_metrics_complete,
-                                            statuses:statuses});
+                                            statuses:statuses, name:twitter_handle});
   });
 });
 

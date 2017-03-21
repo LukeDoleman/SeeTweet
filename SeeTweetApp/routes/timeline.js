@@ -31,15 +31,15 @@ var insertDocument = function(collection_name, data, db, callback) {
   // Insert some documents
   collection.insert(data, function(err, result) {
     test.equal(err, null);
-    console.log("Inserted documents into the document collection");
+    console.log("Inserted a document into the document collection");
     callback(result);
   });
 };
 
 router.get('/', function(req, res) {
-
     var twitter_handle = req.query.username;
-    //Time from querystring in form (e.g) ['0','24']
+    //Converts Time query from '0,24' to ['0','24']
+    //and ensures all times are two digits in length.
     var time = req.query.time.split(',').map(function(t) {
       if (t < 10) {
         return '0' + t;
@@ -47,11 +47,36 @@ router.get('/', function(req, res) {
         return t;
       }
     });
-
-    console.log(time);
     async.waterfall([
-        //Determine if the twitter handle exists in the database already
+
         function(callback) {
+            client.get('application/rate_limit_status', function(error, info, response) {
+                if (!error) {
+                    var rate_info = info.resources.statuses["/statuses/user_timeline"];
+                    var epochTime = rate_info.reset;
+                    var d = new Date(0); // The 0 here sets the date to the epoch
+                    d.setUTCSeconds(epochTime);
+                    var resetTime = d.toString().substring(16,24);
+                    console.log(rate_info.remaining);
+                    if (rate_info.remaining < 30 ) {
+                      var err = "Rate Limit Exceeded, please wait until: " +
+                      resetTime + " to search again";
+                      res.status(400).render('error', {
+                        title: 'Error',
+                        reset: resetTime,
+                        err:err,
+                      });
+                    } else {
+                      callback(null, resetTime);
+                    }
+                } else {
+                  console.log(error);
+                }
+            });
+        },
+
+        //Determine if the twitter handle exists in the database already
+        function(rate, callback) {
           MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
               test.equal(null, err);
               console.log("Connected correctly to server");
@@ -69,7 +94,6 @@ router.get('/', function(req, res) {
           //Check if number of statuses could be read from the database
           if (typeof existing_tweets !== 'undefined' && existing_tweets.length > 0) {
             console.log(existing_tweets[0].user.statuses_count);
-            //console.log(existing_tweets[0].statuses_count);
             callback(null, existing_tweets);
           } else {
             client.get('users/show', {
@@ -79,10 +103,12 @@ router.get('/', function(req, res) {
                     callback(null, info.statuses_count);
                 } else {
                   console.log(error);
-                  console.log(twitter_handle + " - can't be found!");
+                  var err = twitter_handle + " - can't be found!";
+                  console.log(err);
                   res.status(400).render('error', {
                       title: 'Error',
                       name: twitter_handle,
+                      err:err
                   });
                 }
             });
@@ -140,6 +166,7 @@ router.get('/', function(req, res) {
                   });
             } else {
               list_tweets = existing_tweets;
+              console.log(list_tweets[0]);
               callback(null, exists, list_tweets);
             }
 
@@ -172,12 +199,13 @@ router.get('/', function(req, res) {
             }, ];
             mentions.links = [];
             var matched = [];
-            var pattern = /\B@[a-z0-9_-]+/gi;
+            //http://stackoverflow.com/questions/15265605/ +
+            // how-to-pull-mentions-out-of-strings-like-twitter-in-javascript
             for (var i = 0; i < tweets.length; i++) {
                 var tweet_creation = tweets[i].created_at.substring(11, 13);
                 if (tweet_creation >= time[0] && tweet_creation < time[1]) {
-                    var stringMatch = (tweets[i].text).match(pattern);
-                    if (!!stringMatch) {
+                    var stringMatch = (tweets[i].text).match(/\B@[a-z0-9_-]+/gi);
+                    if (stringMatch) {
                         for (var j = 0; j < stringMatch.length; j++) {
                             var arrayMatch = stringMatch[j];
                             if (matched.indexOf(arrayMatch) >= 0) {
@@ -224,6 +252,8 @@ router.get('/', function(req, res) {
             callback(null, mentions, matched);
         },
 
+        //Can remove this matched parameter ^^
+
         //Perform crawl on list of mentions from previous function
         function(mentions, matched, callback) {
             var full_mentions = mentions;
@@ -234,7 +264,7 @@ router.get('/', function(req, res) {
                 if (mention.user.toLowerCase() != ("@" + twitter_handle.toLowerCase())) {
                     client.get('statuses/user_timeline', {
                         screen_name: mention.user,
-                        count: 320
+                        count: 200
                     }, function(error, tweets, response) {
                         if (!error) {
                             console.log(x);
@@ -247,10 +277,9 @@ router.get('/', function(req, res) {
                             for (var z = 0; z < full_mentions.handles.length; z++) {
                                 matched.push(full_mentions.handles[z].user);
                             }
-                            var pattern = /\B@[a-z0-9_-]+/gi;
                             for (var i = 0; i < tweets.length; i++) {
                                 user_tweets.push(tweets[i]);
-                                var stringMatch = (tweets[i].text).match(pattern);
+                                var stringMatch = (tweets[i].text).match(/\B@[a-z0-9_-]+/gi);
                                 if (!!stringMatch) {
                                     for (var j = 0; j < stringMatch.length; j++) {
                                         var arrayMatch = stringMatch[j];
@@ -361,40 +390,47 @@ router.get('/', function(req, res) {
         function(full_mentions, full_user_tweets, callback) {
           var x = 0;
           var len = full_user_tweets.length - 1;
+          console.log(len);
           async.forEach(full_user_tweets, function(user, next) {
-            MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
-              test.equal(null, err);
-              console.log("Connected correctly to server");
-              console.log(user.length);
-              //Create new collection for inner ring of user tweets
-              //include a hyphen so as not to conuse with a twitter handle
-              //(illegal character)
-              var network_collection = twitter_handle + "-network";
-              var collection = db.collection(network_collection);
-              // Insert some documents
-              collection.insert(user, function(err, result) {
-                test.equal(err, null);
-                console.log("Inserted documents into the document collection");
-                if (x === len) {
-                    db.close();
-                    callback(null, full_mentions);
-                } else {
-                    console.log("x is - " + x);
-                    x++;
-                    next();
-                }
+            if (user.length > 0) {
+              MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
+                test.equal(null, err);
+                console.log("Connected correctly to server");
+                //Create new collection for inner ring of user tweets
+                //include a hyphen so as not to confuse with a twitter handle
+                //(illegal character)
+                var network_collection = twitter_handle + "-network";
+                var collection = db.collection(network_collection);
+                // Insert some documents
+                collection.insert(user, function(err, result) {
+                  if (!test.equal(err, null)) {
+                    console.log("XXXX");
+                    console.log(err);
+                    console.log(user);
+                    console.log(user.length);
+                  }
+                  console.log("Inserted documents into the document collection");
+                  if (x === len) {
+                      db.close();
+                      callback(null, full_mentions);
+                  } else {
+                      console.log("x is - " + x);
+                      x++;
+                      next();
+                  }
+                });
               });
-              // insertDocuments(network_collection, user, db, function() {
-              //   db.close();
-              //   if (x === len - 1) {
-              //       callback(null, full_mentions);
-              //   } else {
-              //       console.log("x is - " + x);
-              //       x++;
-              //       next();
-              //   }
-              // });
-            });
+            } else {
+              console.log("Empty User");
+              if (x === len) {
+                  db.close();
+                  callback(null, full_mentions);
+              } else {
+                  console.log("x is - " + x);
+                  x++;
+                  next();
+              }
+            }
           }, function(err) {
               if (err) {
                   return callback(err);

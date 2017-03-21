@@ -16,10 +16,6 @@ $(document).ready(function() {
       });
 });
 
-
-
-
-
 //Select the existing SVG element
 //(initialised on the timeline page)
 var svg = d3.select("svg"),
@@ -72,7 +68,6 @@ node.append("image")
                     linkColor: "#55acee",
                 }
             );
-            return;
         });
     });
 

@@ -1,6 +1,4 @@
 $(window).on( "load", function() {
-  console.log(user_metrics[2][0]);
-  console.log(user_metrics[2][1]);
   for (var i=0;i<user_metrics[2][0].length;i++) {
     twttr.widgets.createTweet(
         user_metrics[2][0][i],

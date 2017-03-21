@@ -29,18 +29,17 @@ block head
           a(href='#')
             span.glyphicon.glyphicon-home
         li
-          a(id='getProfile' href='javascript:void();') Your Profile
+          a(id='getProfile' href='javascript:void();') !{name}'s Profile
         li
-          a(id='getStatistics' href='javascript:void();' style="text-decoration:underline") Statistics
+          a(id='getStatistics' href='javascript:void();' style="text-decoration:underline") !{name}'s Statistics
 
 block main
   .container
     .alert.alert-success.alert-dismissible(role='alert')
       button.close(type='button', data-dismiss='alert', aria-label='Close')
         span(aria-hidden='true') ×
-      |  This page aims to give you an
-      |  insight into the tweeting habits of your profile and the people you
-      |  interact with most often.
+      |  This page aims to give you greater insight into how and when you
+      |  Tweet compared with your network.
 
   .first
     .col-lg-12

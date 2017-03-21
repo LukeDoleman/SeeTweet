@@ -61,12 +61,6 @@ block scripts
             keyboard: true,
             min: 0,
             max: 24,
-            //- from: function () { var x = !{JSON.stringify(time)};
-            //-                     console.log(x);
-            //-                     return x[0];},
-            //- to: function () { var x = !{JSON.stringify(time)};
-            //-                     console.log(x);
-            //-                     return x[1];},
             from: time[0],
             to: time[1],
             type: 'double',
@@ -76,7 +70,7 @@ block scripts
             onFinish: function (data) {
                 var trimmedUrl = document.URL.substring(0, document.URL.indexOf("&"));
                 var url = trimmedUrl + '&' + 'time=' + data.from + ',' + data.to;
-                history.replaceState('data to be passed', 'Title of the page', url);
+                history.replaceState('', '', url);
             }
         });
     });

@@ -3,8 +3,7 @@ extends layout
 block main
   .container
     .error-wrapper(style="text-align:center;")
-      .h1 Can't find user - <strong>!{name}</strong><br><br>
-        .h2 Try a different username
+      .h1 <strong>!{err}</strong><br><br>
         
         button(id="searchAgain" type="button" class="btn btn-info" 
         style="background-color:#55acee") Search Again

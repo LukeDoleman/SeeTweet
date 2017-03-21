@@ -20,9 +20,9 @@ block head
                     a(href='#')
                         span.glyphicon.glyphicon-home
                 li
-                    a(href='javascript:void();') Your Profile
+                    a(href='javascript:void();') !{name}'s Profile
                 li
-                    a(id='getStatistics' href='javascript:void();') Statistics
+                    a(id='getStatistics' href='javascript:void();') !{name}'s Profile
 
 block main
     div.col-lg-12(class="vcenter")
@@ -30,10 +30,12 @@ block main
             div.panel-heading
                 h3.panel-title
                     img(src=pic)
-                    span(style="vertical-align:bottom")  #{user} #{followers} #{description} #{mentions}
+                    span(style="vertical-align:bottom") #{user} - #{description} <br><br>Followers: 
+                    | <strong>#{followers}</strong> | Following: <strong> #{following} </strong>
+                    | | Likes: <strong> #{likes} </strong> #{mentions}
 
     -for(var i = 0; i < tweets.length; ++i){
-      .col-lg-4
+      .col-lg-4(style="height:150px;")
         .panel.panel-info
           .panel-heading
             .panel-title
@@ -43,5 +45,5 @@ block main
               span.glyphicon.glyphicon-heart(style="color:#E81C4F;")
               span &#32; <b>#{retweets[i]}</b>
           .panel-body
-            span #{tweets[i]} <br> Favourite Count: <b>#{favs[i]}</b> | Retweet Count: <b>#{retweets[i]}</b>
+            span #{tweets[i]} 
     -}
