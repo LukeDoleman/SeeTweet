@@ -9,7 +9,6 @@ var index = require('./routes/index');
 var timeline = require('./routes/timeline');
 var profile = require('./routes/profile');
 var statistics = require('./routes/statistics');
-var users = require('./routes/users');
 
 //MongoDB setup
 var MongoClient = require('mongodb').MongoClient;
@@ -33,7 +32,6 @@ app.use('/', index);
 app.use('/timeline', timeline);
 app.use('/profile', profile);
 app.use('/statistics', statistics);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

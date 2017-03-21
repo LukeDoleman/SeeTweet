@@ -26,12 +26,12 @@ block head
     #navbar-collapse-1.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-left
         li
-          a(href='#')
+          a(id='getTimeline' href='javascript:void();')
             span.glyphicon.glyphicon-home
         li
           a(id='getProfile' href='javascript:void();') !{name}'s Profile
         li
-          a(id='getStatistics' href='javascript:void();' style="text-decoration:underline") !{name}'s Statistics
+          a(href='#' style="text-decoration:underline") !{name}'s Statistics
 
 block main
   .container
@@ -94,11 +94,6 @@ block main
         .col-lg-6
           .h1(style="text-align:center;text-decoration:underline") Network Device Use
           canvas(id="myPieChart" width="300" height="300")
-        //- div.col-lg-6
-        //-   canvas(id="myBarChart" width="300" height="300")
-        //- div.col-lg-6
-        //-   canvas(id="myChart" width="300" height="300")
-        //-   canvas(id="myPieChart" width="300" height="300")
 
 block scripts
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")

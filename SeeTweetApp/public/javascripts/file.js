@@ -71,7 +71,6 @@ $(document).ready(function() {
 
     $("#getStatistics").click(function() {
         var url = window.location.href;
-        //var new_url = url.replace("timeline", "statistics");
         var new_url;
         if (url.includes("timeline")) {
           new_url = url.replace("timeline", "statistics");
@@ -84,5 +83,17 @@ $(document).ready(function() {
         window.location.href = new_url;
     });
 
-    // var slider = new Slider('#ex2', {});
+    $("#getTimeline").click(function() {
+        var url = window.location.href;
+        var new_url;
+        if (url.includes("statistics")) {
+          new_url = url.replace("statistics", "timeline");
+        } else if (url.includes("profile")) {
+          new_url = url.replace("profile", "timeline");
+        } else {
+          new_url = url;
+        }
+        console.log(new_url);
+        window.location.href = new_url;
+    });
 });

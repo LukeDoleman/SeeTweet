@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-// var request = require('request');
 var Twitter = require('twitter');
 var client = new Twitter({
     consumer_key: 'izFoNkDtE3ZPo0incOx03Z0on',
@@ -13,7 +12,6 @@ var MongoClient = require('mongodb').MongoClient;
 var test = require('assert');
 
 // http://www.sebastianseilund.com/nodejs-async-in-practice
-
 var insertDocuments = function(collection_name, data, db, callback) {
   // Get the documents collection
   var collection = db.collection(collection_name);
@@ -49,6 +47,7 @@ router.get('/', function(req, res) {
     });
     async.waterfall([
 
+        // Check rate limit has not been exceeded.
         function(callback) {
             client.get('application/rate_limit_status', function(error, info, response) {
                 if (!error) {
@@ -96,6 +95,7 @@ router.get('/', function(req, res) {
             console.log(existing_tweets[0].user.statuses_count);
             callback(null, existing_tweets);
           } else {
+            //Else check user exists
             client.get('users/show', {
                 screen_name: twitter_handle
             }, function(error, info, response) {
@@ -115,8 +115,7 @@ router.get('/', function(req, res) {
           }
         },
 
-
-
+        //Retrieve Tweets if need be
         function(existing_tweets, callback) {
             var number; var exists;
             if (existing_tweets.constructor === Array) {
@@ -131,9 +130,6 @@ router.get('/', function(req, res) {
             var iterations = Math.ceil((number / 200));
             var max;
             var list_tweets = [];
-
-            console.log("count is - " + number);
-
             if (!exists) {
               async.whilst(function() {
                       return x <= iterations;
@@ -249,13 +245,11 @@ router.get('/', function(req, res) {
                 }
             }
             console.log(mentions);
-            callback(null, mentions, matched);
+            callback(null, mentions);
         },
 
-        //Can remove this matched parameter ^^
-
         //Perform crawl on list of mentions from previous function
-        function(mentions, matched, callback) {
+        function(mentions, callback) {
             var full_mentions = mentions;
             var len = full_mentions.handles.length;
             var x = 1;
@@ -404,10 +398,7 @@ router.get('/', function(req, res) {
                 // Insert some documents
                 collection.insert(user, function(err, result) {
                   if (!test.equal(err, null)) {
-                    console.log("XXXX");
                     console.log(err);
-                    console.log(user);
-                    console.log(user.length);
                   }
                   console.log("Inserted documents into the document collection");
                   if (x === len) {

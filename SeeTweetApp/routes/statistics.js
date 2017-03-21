@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-// var request = require('request');
 var Twitter = require('twitter');
 var client = new Twitter({
   consumer_key: 'izFoNkDtE3ZPo0incOx03Z0on',
@@ -106,8 +105,6 @@ function convertListToPercentage(list) {
 }
 
 function extractMetrics(list) {
-    //Need to check DB before adding docs so cant use list length
-    //here>  FIX THIS THE 200
     var list_metrics = [];
     for (var l in list) {
       tweets = list[l];
@@ -121,6 +118,8 @@ function extractMetrics(list) {
       //Desktop Client || Mobile client
       var device = [0,0];
       var test;
+
+      //Get sample of Tweets
       if (tweets.length >= 200) {
         list_length = 200;
       } else {
@@ -181,7 +180,6 @@ function extractMetrics(list) {
       list_metrics.push(local_metrics);
     }
     //Get average list from all the lists
-    //[["2.24",[96,7],[12,17,21,22,26,3,2],[1,95,94,10]]
     var average_list_metrics = [];
     //Get average tweet per day (0)
     var average_tweets=0;
@@ -219,10 +217,10 @@ function extractMetrics(list) {
     return list_metrics;
 }
 
-//http://plnkr.co/edit/hAx36JQhb0RsvVn7TomS?p=preview
 router.get('/', function(req, res, next) {
     var twitter_handle = req.param('username');
 
+    //Read User Data from DB
     async.waterfall([
         function(callback) {
             MongoClient.connect('mongodb://localhost:27017/tweetdb', function(err, db) {
@@ -256,6 +254,7 @@ router.get('/', function(req, res, next) {
           });
         },
 
+        //Reformat network metrics
         function (docs, network_docs, callback) {
           var network_metrics = {};
           for (var i=0;i<network_docs.length;i++) {
@@ -266,14 +265,10 @@ router.get('/', function(req, res, next) {
               network_metrics[network_docs[i].user.name] = [network_docs[i]];
             }
           }
-          console.log(Object.keys(network_metrics).length);
-          console.log(network_metrics.length);
           callback(null, docs, network_metrics);
         },
 
     ], function(err, docs, network_metrics) {
-      console.log('Docs :- ' + docs.length);
-      console.log('Network Docs :- ' + network_metrics);
       var network_metrics_complete = extractMetrics(network_metrics);
       tweets = docs;
       var statuses = tweets[0].user.statuses_count;
@@ -336,17 +331,8 @@ router.get('/', function(req, res, next) {
       tweet_days = convertListToPercentage(tweet_days);
       var full_ids = getMaxMetric(tweet_ids_max);
       var avg_creation = (statuses/daysSinceCreation).toFixed(2);
-      console.log("Tweet Days:- " + tweet_days);
-      console.log("Device Use:- " + device);
-      console.log("Tweet Times:- " + tweet_times);
-      console.log("Metrics:- " + full_ids);
-      console.log("Average Creation:- " + avg_creation);
       device = convertListToPercentage(device);
       tweet_times = convertListToPercentage(tweet_times);
-      console.log(device);
-      console.log(tweet_times);
-      console.log("---------------------------------------");
-      console.log(network_metrics_complete);
       metrics_complete.push(avg_creation, device, full_ids, tweet_days, tweet_times);
       console.log(metrics_complete);
       res.status(200).render('statistics', {title:'Statistics', user_metrics:metrics_complete,
