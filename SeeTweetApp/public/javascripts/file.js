@@ -15,7 +15,7 @@ $(document).ready(function() {
           strokeWidth: 4,
           trailWidth: 1,
           easing: 'easeInOut',
-          duration: 20000,
+          duration: 4500,
           text: {
             autoStyleContainer: false
           },

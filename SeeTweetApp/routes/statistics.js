@@ -335,6 +335,8 @@ router.get('/', function(req, res, next) {
       tweet_times = convertListToPercentage(tweet_times);
       metrics_complete.push(avg_creation, device, full_ids, tweet_days, tweet_times);
       console.log(metrics_complete);
+      console.log(network_metrics_complete);
+      network_metrics_complete[0] = network_metrics_complete[0].toFixed(2);
       res.status(200).render('statistics', {title:'Statistics', user_metrics:metrics_complete,
                                             network_metrics:network_metrics_complete,
                                             statuses:statuses, name:twitter_handle});
