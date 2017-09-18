@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var Twitter = require('twitter');
+var keys = require('../twitterKeys');
 var client = new Twitter({
-    consumer_key: 'izFoNkDtE3ZPo0incOx03Z0on',
-    consumer_secret: 'YsBXESCPXk93j9y7qRQQMnUv0LD3c9EpsPMcOIf44WGFfJdgDQ',
-    bearer_token: 'AAAAAAAAAAAAAAAAAAAAAFT%2FxgAAAAAAG5djI51WpTcUGgbTNw%2BP3n30Xss%3DrLomzfrUXc1Ul2uWQ52S5gBYm3W0ru5afyCR0ziQ7DfzrPffRt'
+    consumer_key: keys.consumer_key,
+    consumer_secret: keys.consumer_secret,
+    bearer_token: keys.bearer_token
 });
 var jsonfile = require('jsonfile');
 var async = require('async');
